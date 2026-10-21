@@ -1,203 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="Author" content="Abduhoo Bin Nasir">
-    <meta name="description" content="Portfolio of Abduhoo Bin Nasir: Computer Science undergraduate at IST, Game Dev Lead at DevCore, and OOP Teaching Assistant Intern. C++ systems, raycasting engines and P2P multiplayer.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abduhoo Bin Nasir - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Sofia" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/998322641c.js" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="Author" content="Abduhoo Bin Nasir">
+<meta name="description" content="Abduhoo Bin Nasir: CS undergraduate at IST, Game Dev Lead at DevCore, OOP TA Intern. C++ systems, raycasting engines and P2P multiplayer.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abduhoo Bin Nasir | Archive</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=VT323&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/998322641c.js" crossorigin="anonymous"></script>
+<script src="script.js" defer></script>
 </head>
 <body>
 
-    <header>
-        <h1>Abduhoo&nbsp; Bin&nbsp; Nasir</h1>
-        <p class="tagline">Computer Science Undergraduate @ IST | Game Dev Lead @ DevCore | TA Intern (OOP)</p>
-        <nav>
-            <a href="#about">About</a>
-            <span class="nav-separator">|</span>
-            <a href="#skills">Skills</a>
-            <span class="nav-separator">|</span>
-            <a href="#projects">Projects</a>
-            <span class="nav-separator">|</span>
-            <a href="#experience">Experience</a>
-            <span class="nav-separator">|</span>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
+<div id="boot" aria-hidden="true"><pre id="boot-log"></pre></div>
+<canvas id="grain" aria-hidden="true"></canvas>
+<div id="dark" aria-hidden="true"></div>
+<div class="hud" aria-hidden="true"><span class="rec">REC</span><span id="clock">00:00:00</span></div>
 
-    <main class="container">
+<header>
+  <h1 id="name" data-text="Abduhoo Bin Nasir">Abduhoo Bin Nasir</h1>
+  <p class="tagline">Computer Science Undergraduate @ IST | Game Dev Lead @ DevCore | TA Intern (OOP)</p>
+  <nav>
+    <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+  </nav>
+</header>
 
-        <section id="about">
-            <h2>About Me</h2>
-            <div class="content-wrapper">
-                <img src="Abduhoo.jpeg" alt="Abduhoo Bin Nasir" class="profile-img">
-                <div class="text-content">
-                    <p>
-                        Hello! I am <strong>Abduhoo Bin Nasir</strong>, a Computer Science undergraduate at the
-                        Institute of Space Technology, Islamabad. I lead game development at DevCore and
-                        teach OOP as a Teaching Assistant Intern.
-                    </p>
-                    <p>
-                        My focus is <strong>C++ systems architecture</strong> and <strong>low-level software design</strong>.
-                        I build game engines from the ground up, including <strong>raycasting renderers</strong> with a
-                        custom DDA algorithm, and I work on <strong>P2P multiplayer networking</strong> for
-                        real-time games. I like clean class hierarchies, readable code and understanding how things
-                        work underneath.
-                    </p>
-                </div>
-            </div>
-        </section>
+<main>
 
-        <section id="skills">
-            <h2>Technical Skills</h2>
+<section id="about">
+  <h2>Subject Profile</h2>
+  <div class="about-grid">
+    <figure class="photo"><img src="Abduhoo.jpeg" alt="Abduhoo Bin Nasir"><figcaption>Subject last seen at the keyboard</figcaption></figure>
+    <div>
+      <p>I'm <strong>Abduhoo Bin Nasir</strong>, a Computer Science undergraduate at the Institute of Space Technology, Islamabad. I lead game development at DevCore and teach OOP as a Teaching Assistant Intern.</p>
+      <p>I work in <strong>C++ systems architecture</strong> and <strong>low-level software design</strong>. I build engines from the ground up, including <strong>raycasting renderers</strong> with a custom DDA algorithm, and I write <strong>P2P multiplayer networking</strong> for real-time games. I like clean class hierarchies and knowing exactly what the machine is doing underneath.</p>
+    </div>
+  </div>
+</section>
 
-            <div class="skill-group">
-                <h3>Languages</h3>
-                <ul class="tag-list">
-                    <li>C++</li>
-                    <li>C</li>
-                    <li>Python</li>
-                    <li>PHP</li>
-                    <li>SQL</li>
-                    <li>Kotlin</li>
-                </ul>
-            </div>
+<section id="skills">
+  <h2>Equipment</h2>
+  <div class="skill-group"><h3>Languages</h3><ul class="tags"><li>C++</li><li>C</li><li>Python</li><li>PHP</li><li>SQL</li><li>Kotlin</li></ul></div>
+  <div class="skill-group"><h3>Systems &amp; Game Dev</h3><ul class="tags"><li>Godot 4</li><li>Raylib</li><li>Raycasting (DDA)</li><li>P2P Networking</li><li>EOS</li><li>Qt</li></ul></div>
+  <div class="skill-group"><h3>Tools &amp; DB</h3><ul class="tags"><li>Git</li><li>GitHub</li><li>MySQL Workbench</li><li>Jetpack Compose</li></ul></div>
+</section>
 
-            <div class="skill-group">
-                <h3>Systems &amp; Game Dev</h3>
-                <ul class="tag-list">
-                    <li>Godot 4</li>
-                    <li>Raylib</li>
-                    <li>Raycasting (DDA)</li>
-                    <li>P2P Networking</li>
-                    <li>EOS</li>
-                    <li>Qt</li>
-                </ul>
-            </div>
+<section id="projects">
+  <h2>Case Files</h2>
+  <div class="grid">
 
-            <div class="skill-group">
-                <h3>Tools &amp; DB</h3>
-                <ul class="tag-list">
-                    <li>Git</li>
-                    <li>GitHub</li>
-                    <li>MySQL Workbench</li>
-                    <li>Jetpack Compose</li>
-                </ul>
-            </div>
-        </section>
+    <article class="file">
+      <span class="stamp">Playable</span>
+      <h3>Blood Sector</h3>
+      <ul class="meta"><li>C++</li><li>Raylib</li><li>DDA Raycasting</li></ul>
+      <!-- <img src="blood-sector.gif" alt="Blood Sector gameplay" class="shot"> -->
+      <p>A Doom-style raycasting engine and FPS in C++. Custom DDA wall rendering, a clean OOP class hierarchy, four levels, and three enemy types: <span class="redact">Walker, Stalker, Boss</span>.</p>
+      <a class="btn" href="https://github.com/abduhoo-bin-nasir/blood-sector" target="_blank" rel="noopener">View Source Code</a>
+    </article>
 
-        <section id="projects">
-            <h2>Projects</h2>
+    <article class="file">
+      <span class="stamp">Multiplayer</span>
+      <h3>Which Way, Good Sir? / Cartographer</h3>
+      <ul class="meta"><li>Godot 4</li><li>Epic Online Services</li><li>P2P</li></ul>
+      <!-- <img src="which-way-good-sir.gif" alt="Which Way, Good Sir? gameplay" class="shot"> -->
+      <p>A multiplayer dungeon game in Godot 4. Players connect through Epic Online Services P2P networking and explore <span class="redact">procedurally generated</span> dungeons together.</p>
+      <a class="btn" href="https://github.com/abduhoo-bin-nasir/which-way-good-sir" target="_blank" rel="noopener">View Source Code</a>
+    </article>
 
-            <div class="project-grid">
+    <article class="file">
+      <span class="stamp">Regional Finalist</span>
+      <h3>Ustad-e-Karigar</h3>
+      <ul class="meta"><li>Python</li><li>Speech-to-Text</li><li>LLM</li></ul>
+      <!-- <img src="ustad-e-karigar.png" alt="Ustad-e-Karigar screenshot" class="shot"> -->
+      <p>An AI assistant built on Python speech-to-text and LLM backends. Regional Finalist at the Alibaba Cloud AI Hackathon, <span class="redact">FAST-NUCES Islamabad</span>.</p>
+      <a class="btn" href="https://github.com/abduhoo-bin-nasir/ustad-e-karigar" target="_blank" rel="noopener">View Source Code</a>
+    </article>
 
-                <article class="project-card">
-                    <h3>Blood Sector</h3>
-                    <ul class="project-tags">
-                        <li>C++</li>
-                        <li>Raylib</li>
-                        <li>DDA Raycasting</li>
-                    </ul>
-                    <!-- <img src="blood-sector.gif" alt="Blood Sector gameplay" class="project-img"> -->
-                    <p>
-                        A Doom-style raycasting engine and game written in C++ with Raylib. It uses a custom DDA
-                        algorithm for wall rendering and a clean OOP architecture, with four levels and
-                        three enemy types.
-                    </p>
-                    <a href="https://github.com/abduhoo-bin-nasir/blood-sector" target="_blank" rel="noopener" class="btn-link">View Source Code</a>
-                </article>
+    <article class="file">
+      <span class="stamp">Transaction-safe</span>
+      <h3>Takeaway</h3>
+      <ul class="meta"><li>PHP</li><li>MySQL</li><li>Relational DB</li></ul>
+      <!-- <img src="takeaway.png" alt="Takeaway web app screenshot" class="shot"> -->
+      <p>A food ordering web app on a relational PHP/MySQL backend. Transaction-safe order flow, an admin panel, and <span class="redact">views and joins</span> across the schema.</p>
+      <a class="btn" href="https://github.com/abduhoo-bin-nasir/takeaway" target="_blank" rel="noopener">View Source Code</a>
+    </article>
 
-                <article class="project-card">
-                    <h3>Which Way, Good Sir? / Cartographer</h3>
-                    <ul class="project-tags">
-                        <li>Godot 4</li>
-                        <li>Epic Online Services</li>
-                        <li>P2P</li>
-                    </ul>
-                    <!-- <img src="which-way-good-sir.gif" alt="Which Way, Good Sir? gameplay" class="project-img"> -->
-                    <p>
-                        A multiplayer dungeon game built in Godot 4. Players connect through Epic Online Services
-                        P2P networking and explore procedurally generated dungeons together.
-                    </p>
-                    <a href="https://github.com/abduhoo-bin-nasir/which-way-good-sir" target="_blank" rel="noopener" class="btn-link">View Source Code</a>
-                </article>
+  </div>
+</section>
 
-                <article class="project-card">
-                    <h3>Ustad-e-Karigar</h3>
-                    <ul class="project-tags">
-                        <li>Python</li>
-                        <li>Speech-to-Text</li>
-                        <li>LLM</li>
-                    </ul>
-                    <!-- <img src="ustad-e-karigar.png" alt="Ustad-e-Karigar screenshot" class="project-img"> -->
-                    <p>
-                        An AI assistant built with Python speech-to-text and LLM backends.
-                        <strong>Regional Finalist</strong> at the Alibaba Cloud AI Hackathon, FAST-NUCES Islamabad.
-                    </p>
-                    <a href="https://github.com/abduhoo-bin-nasir/ustad-e-karigar" target="_blank" rel="noopener" class="btn-link">View Source Code</a>
-                </article>
+<section id="experience">
+  <h2>Service Record</h2>
+  <div class="role"><h3>Game Development Lead</h3><p>DevCore Student Organization, IST</p></div>
+  <div class="role"><h3>Teaching Assistant Intern (OOP &amp; OOP Lab)</h3><p>Institute of Space Technology</p></div>
+</section>
 
-                <article class="project-card">
-                    <h3>Takeaway</h3>
-                    <ul class="project-tags">
-                        <li>PHP</li>
-                        <li>MySQL</li>
-                        <li>Relational DB</li>
-                    </ul>
-                    <!-- <img src="takeaway.png" alt="Takeaway web app screenshot" class="project-img"> -->
-                    <p>
-                        A food ordering web app on a relational PHP/MySQL backend, with a transaction-safe order
-                        flow, an admin panel, and views and joins across the schema.
-                    </p>
-                    <a href="https://github.com/abduhoo-bin-nasir/takeaway" target="_blank" rel="noopener" class="btn-link">View Source Code</a>
-                </article>
+<section id="contact">
+  <h2>Make Contact</h2>
+  <p><i class="fa-solid fa-envelope"></i><strong>Email:</strong> <a href="mailto:abduhoobinnasir@gmail.com">abduhoobinnasir@gmail.com</a></p>
+  <p><i class="fa-brands fa-linkedin"></i><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/abduhoo-bin-nasir-1643693a0/" target="_blank" rel="noopener">linkedin.com/in/abduhoo-bin-nasir</a></p>
+  <p><i class="fa-brands fa-github"></i><strong>GitHub:</strong> <a href="https://github.com/abduhoo-bin-nasir" target="_blank" rel="noopener">github.com/abduhoo-bin-nasir</a></p>
+</section>
 
-            </div>
-        </section>
+</main>
 
-        <section id="experience">
-            <h2>Experience &amp; Leadership</h2>
-
-            <div class="role-card">
-                <h3>Game Development Lead</h3>
-                <p class="role-org">DevCore Student Organization, IST</p>
-            </div>
-
-            <div class="role-card">
-                <h3>Teaching Assistant Intern (OOP &amp; OOP Lab)</h3>
-                <p class="role-org">Institute of Space Technology</p>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>Get In Touch</h2>
-            <div class="contact-info">
-                <p>
-                    <i class="fa-solid fa-envelope"></i>
-                    <strong>Email:</strong>
-                    <a href="mailto:abduhoobinnasir@gmail.com">abduhoobinnasir@gmail.com</a>
-                </p>
-                <p>
-                    <i class="fa-brands fa-linkedin"></i>
-                    <strong>LinkedIn:</strong>
-                    <a href="https://www.linkedin.com/in/abduhoo-bin-nasir-1643693a0/" target="_blank" rel="noopener">linkedin.com/in/abduhoo-bin-nasir</a>
-                </p>
-                <p>
-                    <i class="fa-brands fa-github"></i>
-                    <strong>GitHub:</strong>
-                    <a href="https://github.com/abduhoo-bin-nasir" target="_blank" rel="noopener">github.com/abduhoo-bin-nasir</a>
-                </p>
-            </div>
-        </section>
-
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Abduhoo Bin Nasir. All rights reserved.</p>
-    </footer>
+<footer><p>&copy; 2026 Abduhoo Bin Nasir. End of recording.</p></footer>
 
 </body>
 </html>
