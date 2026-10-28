@@ -40,8 +40,10 @@
 
   <style>
     :root {
-      --x: 50%;
-      --y: 50%;
+      --x: 50vw;
+      --y: 35vh;
+      /* torch radius: big enough to read a whole card on a phone, capped on desktop */
+      --r: clamp(260px, 48vmin, 460px);
     }
 
     body {
@@ -51,18 +53,15 @@
       overflow-x: hidden;
     }
 
-    /* CRT Scanlines Overlay */
+    /* CRT Scanlines Overlay (kept subtle so text stays crisp) */
     .scanlines {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       pointer-events: none;
       z-index: 90;
       background: linear-gradient(
-        rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, 0.3) 50%
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.12) 50%
       );
       background-size: 100% 4px;
     }
@@ -70,13 +69,10 @@
     /* Subtle CRT Vignette & Flicker */
     .crt-vignette {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       pointer-events: none;
       z-index: 89;
-      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9), inset 0 0 180px rgba(0, 0, 0, 0.8);
+      box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.55), inset 0 0 140px rgba(0, 0, 0, 0.3);
       animation: crtFlicker 0.15s infinite;
       opacity: 0.85;
     }
@@ -87,20 +83,20 @@
       100% { opacity: 0.84; }
     }
 
-    /* Flashlight Torch Effect */
+    /* Flashlight Torch Effect
+       Ambient light everywhere (page is always readable), with a big warm
+       pool of light where the torch points. */
     #flashlight {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       pointer-events: none;
       z-index: 88;
       background: radial-gradient(
-        circle 220px at var(--x) var(--y),
-        transparent 0%,
-        rgba(12, 10, 10, 0.92) 75%,
-        rgba(12, 10, 10, 0.98) 100%
+        circle var(--r) at var(--x) var(--y),
+        rgba(255, 236, 200, 0.07) 0%,
+        rgba(255, 236, 200, 0.03) 35%,
+        rgba(12, 10, 10, 0.18) 60%,
+        rgba(12, 10, 10, 0.42) 100%
       );
     }
 
@@ -157,11 +153,19 @@
       border-radius: 2px;
       user-select: none;
     }
-    .redacted:hover {
+    .redacted.revealed {
       background-color: rgba(163, 32, 31, 0.25);
       color: #8fb89a;
       text-shadow: 0 0 6px #8fb89a;
     }
+    @media (hover: hover) {
+      .redacted:hover {
+        background-color: rgba(163, 32, 31, 0.25);
+        color: #8fb89a;
+        text-shadow: 0 0 6px #8fb89a;
+      }
+    }
+    .redacted:focus-visible { outline: 2px solid #8fb89a; outline-offset: 2px; }
 
     /* Rotated Stamps */
     .stamp {
@@ -289,11 +293,11 @@
           </div>
 
           <p>
-            I'm Abduhoo Bin Nasir, a Computer Science undergraduate at the <span class="redacted" title="Hover to reveal">Institute of Space Technology, Islamabad</span>. I lead game development at DevCore and teach OOP as a Teaching Assistant Intern.
+            I'm Abduhoo Bin Nasir, a Computer Science undergraduate at the <span class="redacted" title="Hover or tap to reveal">Institute of Space Technology, Islamabad</span>. I lead game development at DevCore and teach OOP as a Teaching Assistant Intern.
           </p>
 
           <p>
-            I work in C++ systems architecture and low-level software design. I build engines from the ground up, including raycasting renderers with a custom DDA algorithm, and I write P2P multiplayer networking for real-time games. I like clean class hierarchies and knowing <span class="redacted" title="Hover to reveal">exactly what the machine is doing underneath</span>.
+            I work in C++ systems architecture and low-level software design. I build engines from the ground up, including raycasting renderers with a custom DDA algorithm, and I write P2P multiplayer networking for real-time games. I like clean class hierarchies and knowing <span class="redacted" title="Hover or tap to reveal">exactly what the machine is doing underneath</span>.
           </p>
 
           <div class="pt-2 flex flex-wrap gap-3 font-vt text-lg">
@@ -566,12 +570,48 @@
 
     window.addEventListener('DOMContentLoaded', runBootSequence);
 
-    // Flashlight mouse tracking
-    window.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      document.documentElement.style.setProperty('--x', `${x}%`);
-      document.documentElement.style.setProperty('--y', `${y}%`);
+    // Flashlight: follows mouse / finger / pen; on touch screens it drifts on its
+    // own when you're not touching, so it works with no mouse at all.
+    (function flashlight() {
+      const root = document.documentElement;
+      const touchOnly = window.matchMedia('(hover: none)');
+      const IDLE_MS = 2200;
+      let tx = innerWidth / 2, ty = innerHeight * 0.35;
+      let x = tx, y = ty, lastInput = -Infinity;
+
+      function aim(cx, cy) { tx = cx; ty = cy; lastInput = performance.now(); }
+      addEventListener('pointermove', (e) => aim(e.clientX, e.clientY), { passive: true });
+      ['touchstart', 'touchmove'].forEach((evt) =>
+        addEventListener(evt, (e) => {
+          const t = e.touches[0];
+          if (t) aim(t.clientX, t.clientY);
+        }, { passive: true })
+      );
+
+      function frame(now) {
+        if (touchOnly.matches && now - lastInput > IDLE_MS) {
+          // slow figure-of-eight sweep across the screen
+          tx = innerWidth  * (0.5 + 0.32 * Math.sin(now / 2600));
+          ty = innerHeight * (0.45 + 0.28 * Math.sin(now / 1700 + 1.2));
+        }
+        x += (tx - x) * 0.09;
+        y += (ty - y) * 0.09;
+        root.style.setProperty('--x', x.toFixed(1) + 'px');
+        root.style.setProperty('--y', y.toFixed(1) + 'px');
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+
+    // Redacted text: tap / Enter / Space toggles it (hover alone can't work on touch)
+    document.querySelectorAll('.redacted').forEach((el) => {
+      el.tabIndex = 0;
+      el.setAttribute('role', 'button');
+      const toggle = () => el.classList.toggle('revealed');
+      el.addEventListener('click', toggle);
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
     });
 
     // Live timecode updater
