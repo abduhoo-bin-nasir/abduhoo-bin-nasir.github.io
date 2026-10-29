@@ -208,8 +208,93 @@
     }
     .profile-photo:hover {
       filter: grayscale(0%) contrast(100%);
-      transform: scale(1.02);
     }
+
+
+    /* ---- Photo slots: stamps, exhibits, evidence locker ---- */
+    .stamp { z-index: 5; }
+
+    .photo-stamp {
+      position: absolute;
+      top: 14px;
+      left: -6px;
+      z-index: 5;
+      transform: rotate(-8deg);
+      font-family: 'Special Elite', monospace;
+      font-size: 0.85rem;
+      line-height: 1.25;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #d23a32;
+      border: 2px dashed #d23a32;
+      background: rgba(12, 10, 10, 0.72);
+      padding: 4px 12px 4px 16px;
+      pointer-events: none;
+    }
+    .photo-stamp span { display: block; font-family: 'VT323', monospace; font-size: 1.05rem; color: #8fb89a; letter-spacing: 2px; }
+
+    /* colour only where the torch is pointing (mask follows the flashlight) */
+    .photo-lit {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; pointer-events: none;
+      -webkit-mask-image: radial-gradient(circle 130px at var(--px, -999px) var(--py, -999px), #000 0%, rgba(0,0,0,.6) 55%, transparent 100%);
+      mask-image: radial-gradient(circle 130px at var(--px, -999px) var(--py, -999px), #000 0%, rgba(0,0,0,.6) 55%, transparent 100%);
+      transition: opacity .4s;
+    }
+    #photo-box:hover .photo-lit { opacity: 0; }
+
+    .exhibit { display: grid; grid-template-columns: 1fr; gap: .6rem; margin-bottom: 1.25rem; }
+    .exhibit.two { grid-template-columns: 1fr 1fr; }
+    .exhibit figure { position: relative; overflow: hidden; aspect-ratio: 16 / 10; border: 1px solid #3a3030; background: #0c0a0a; }
+    .exhibit img {
+      width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in;
+      filter: grayscale(.45) contrast(1.05);
+      transition: filter .4s, transform .4s;
+    }
+    .exhibit figure:hover img { filter: none; transform: scale(1.03); }
+    .exhibit figcaption {
+      position: absolute; left: 0; bottom: 0; padding: 1px 8px;
+      font-family: 'VT323', monospace; font-size: 1rem; letter-spacing: 1px;
+      color: #8fb89a; background: rgba(12, 10, 10, .8); border-top: 1px solid rgba(143,184,154,.3); border-right: 1px solid rgba(143,184,154,.3);
+      pointer-events: none;
+    }
+
+    .evidence-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+      gap: 2.25rem 1.75rem;
+      padding: 2rem 1.5rem;
+      background: #121010;
+      border: 1px solid #2a2222;
+      border-radius: 4px;
+    }
+    .evidence {
+      position: relative;
+      background: #d8d0bd;
+      padding: .6rem .6rem 0;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .65);
+      transform: rotate(var(--rot, -1.5deg));
+      transition: transform .3s;
+    }
+    .evidence:nth-child(2n) { --rot: 1.8deg; }
+    .evidence:nth-child(3n) { --rot: -.7deg; }
+    .evidence:hover { transform: rotate(0) scale(1.03); z-index: 2; }
+    .evidence::before {
+      content: ""; position: absolute; top: -12px; left: 50%; width: 84px; height: 24px;
+      transform: translateX(-50%) rotate(-3deg);
+      background: rgba(200, 190, 150, .55); box-shadow: 0 1px 3px rgba(0,0,0,.4);
+    }
+    .evidence img { width: 100%; height: 210px; object-fit: contain; background: #1a1616; display: block; cursor: zoom-in; }
+    .evidence figcaption { font-family: 'Special Elite', monospace; font-size: .8rem; line-height: 1.35; color: #2a2222; padding: .65rem .15rem .85rem; }
+    .evidence figcaption b { display: block; font-family: 'VT323', monospace; font-weight: 400; font-size: 1.1rem; letter-spacing: 1px; color: #a3201f; }
+
+    #lightbox {
+      position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, .94); padding: 1rem; cursor: zoom-out;
+    }
+    #lightbox[hidden] { display: none; }
+    #lightbox img { max-width: 96vw; max-height: 88vh; object-fit: contain; box-shadow: 0 0 40px rgba(0,0,0,.8); }
+    #lightbox .lb-hint { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font-family: 'VT323', monospace; font-size: 1.2rem; color: #8fb89a; letter-spacing: 2px; }
 
     /* Reduced Motion Accessibility */
     @media (prefers-reduced-motion: reduce) {
@@ -257,11 +342,12 @@
   <!-- Main Navigation Sidebar / Top Bar -->
   <nav class="sticky top-[45px] z-40 bg-[#0c0a0a]/95 border-b border-[#332b2b] px-4 py-3 backdrop-blur-sm">
     <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center font-special text-xs md:text-sm tracking-wider">
-      <a href="#" class="text-bone hover:text-bloodbright transition mb-2 sm:mb-0 text-base font-bold">ABDUHOO's VAULT</a>
+      <a href="#" class="text-bone hover:text-bloodbright transition mb-2 sm:mb-0 text-base font-bold">ABDUHOO.ARCHIVE</a>
       <div class="flex flex-wrap gap-4 md:gap-6">
         <a href="#subject-profile" class="text-bone/80 hover:text-crtgreen transition">[1] Subject Profile</a>
         <a href="#equipment" class="text-bone/80 hover:text-crtgreen transition">[2] Equipment</a>
         <a href="#case-files" class="text-bone/80 hover:text-crtgreen transition">[3] Case Files</a>
+        <a id="nav-evidence" hidden href="#evidence-locker" class="text-bone/80 hover:text-crtgreen transition">[3.5] Evidence Locker</a>
         <a href="#service-record" class="text-bone/80 hover:text-crtgreen transition">[4] Service Record</a>
         <a href="#make-contact" class="text-bone/80 hover:text-crtgreen transition">[5] Make Contact</a>
       </div>
@@ -278,9 +364,11 @@
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start bg-[#121010] p-6 rounded border border-[#2a2222] relative shadow-xl">
         <!-- Photo Container -->
-        <div class="relative overflow-hidden rounded border border-[#3a3030] bg-[#0c0a0a] group aspect-[4/5] flex items-center justify-center">
-          <img src="https://placehold.co/400x500/161414/d8d0bd?text=SUBJECT+ABDUHOO" alt="Abduhoo Bin Nasir" class="profile-photo w-full h-full object-cover">
-          <div class="absolute bottom-2 left-2 bg-[#0c0a0a]/80 px-2 py-1 font-vt text-xs text-crtgreen border border-crtgreen/30">
+        <div id="photo-box" class="relative overflow-hidden rounded border border-[#3a3030] bg-[#0c0a0a] group aspect-[4/5] flex items-center justify-center">
+          <img id="photo-main" src="assets/profile/abduhoo.jpg" data-fallback="Abduhoo.jpeg|https://placehold.co/400x500/161414/d8d0bd?text=SUBJECT+ABDUHOO" data-keep alt="Abduhoo Bin Nasir" class="profile-photo w-full h-full object-cover">
+          <img id="photo-lit" class="photo-lit" alt="" aria-hidden="true">
+          <div class="photo-stamp">Subject 042<span>OBSERVED // 02:14</span></div>
+          <div class="absolute bottom-2 left-2 bg-[#0c0a0a]/80 px-2 py-1 font-vt text-xs text-crtgreen border border-crtgreen/30 z-[5]">
             IMG_ID: 9942-ABN
           </div>
         </div>
@@ -374,6 +462,10 @@
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-blood/60 transition">
           <div class="stamp">CLASSIFIED</div>
           <div>
+            <div class="exhibit two" data-exhibit>
+            <figure data-slot><img class="zoomable" src="assets/projects/blood-sector-1.jpg" alt="Blood Sector screenshot 1"><figcaption>EXHIBIT 001-A</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/blood-sector-2.jpg" alt="Blood Sector screenshot 2"><figcaption>EXHIBIT 001-B</figcaption></figure>
+          </div>
             <div class="font-vt text-bloodbright text-xl mb-1">CASE FILE #001</div>
             <h3 class="font-special text-2xl text-bone mb-3">Blood Sector</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
@@ -386,7 +478,7 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">MEDIA: blood-sector.gif (PENDING)</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #001 // EOF</span>
             <a href="https://github.com/abduhoo-bin-nasir/Blood-Sector" target="_blank" class="inline-flex items-center space-x-2 px-4 py-2 bg-blood text-bone font-special text-xs tracking-wider rounded hover:bg-bloodbright transition">
               <i class="fa-brands fa-github"></i>
               <span>View Source Code</span>
@@ -398,6 +490,10 @@
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp confidential">CONFIDENTIAL</div>
           <div>
+            <div class="exhibit two" data-exhibit>
+            <figure data-slot><img class="zoomable" src="assets/projects/which-way-good-sir-1.jpg" alt="Which Way Good Sir screenshot 1"><figcaption>EXHIBIT 002-A</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/which-way-good-sir-2.jpg" alt="Which Way Good Sir screenshot 2"><figcaption>EXHIBIT 002-B</figcaption></figure>
+          </div>
             <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #002</div>
             <h3 class="font-special text-2xl text-bone mb-3">Which Way, Good Sir? / Cartographer</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
@@ -410,7 +506,7 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">MEDIA: which-way-good-sir.gif (PENDING)</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #002 // EOF</span>
             <span class="font-vt text-xs text-bone/40 italic">SOURCE CODE RESTRICTED</span>
           </div>
         </div>
@@ -419,6 +515,9 @@
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp restricted">RESTRICTED</div>
           <div>
+            <div class="exhibit" data-exhibit>
+            <figure data-slot><img class="zoomable" src="assets/projects/ustad-e-karigar-1.jpg" alt="Ustad E Karigar screenshot 1"><figcaption>EXHIBIT 003-A</figcaption></figure>
+          </div>
             <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #003</div>
             <h3 class="font-special text-2xl text-bone mb-3">Ustad-e-Karigar</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
@@ -431,7 +530,7 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">MEDIA: ustad-e-karigar.png (PENDING)</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #003 // EOF</span>
             <span class="font-vt text-xs text-bone/40 italic">SOURCE CODE RESTRICTED</span>
           </div>
         </div>
@@ -440,6 +539,9 @@
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp decrypted">DECRYPTED</div>
           <div>
+            <div class="exhibit" data-exhibit>
+            <figure data-slot><img class="zoomable" src="assets/projects/takeaway-1.jpg" alt="Takeaway screenshot 1"><figcaption>EXHIBIT 004-A</figcaption></figure>
+          </div>
             <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #004</div>
             <h3 class="font-special text-2xl text-bone mb-3">Takeaway</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
@@ -452,11 +554,57 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">MEDIA: takeaway.png (PENDING)</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #004 // EOF</span>
             <span class="font-vt text-xs text-bone/40 italic">SOURCE CODE RESTRICTED</span>
           </div>
         </div>
 
+
+        <!-- Project 5: Ultimate Tic Tac Toe (appears only once its screenshot is uploaded) -->
+        <div data-card-optional class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
+          <div class="stamp decrypted">ARCHIVED</div>
+          <div>
+            <div class="exhibit" data-exhibit>
+              <figure><img class="zoomable" src="assets/projects/ultimate-tic-tac-toe.png" alt="Ultimate Tic Tac Toe screenshot"><figcaption>EXHIBIT 005-A</figcaption></figure>
+            </div>
+            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #005</div>
+            <h3 class="font-special text-2xl text-bone mb-3">Ultimate Tic Tac Toe</h3>
+            <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
+              <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">C++</span>
+              <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">Qt</span>
+              <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">GUI</span>
+            </div>
+            <p class="font-courier text-bone/90 text-sm md:text-base leading-relaxed mb-6">
+              Nine tic tac toe boards in one 3x3 grid, built in C++ with Qt. The cell you pick decides which board your opponent must play next, and winning three boards in a row wins the game.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
+            <span class="font-vt text-xs opacity-60">CASE FILE #005 // EOF</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3.5 Evidence Locker (hidden until at least one image exists in assets/certs/) -->
+    <section id="evidence-locker" hidden class="pt-8 border-l-2 border-bloodbright pl-4 sm:pl-8">
+      <div class="font-vt text-bloodbright text-xl tracking-widest mb-2">[EVIDENCE // SECTION 03.5]</div>
+      <h2 class="font-special text-3xl md:text-4xl text-bone mb-4">Evidence Locker</h2>
+      <p class="font-courier text-bone/80 text-sm md:text-base mb-6">Recovered documents and field photographs. Tap an item to inspect.</p>
+
+      <div class="evidence-board">
+        <figure class="evidence" data-slot>
+          <img class="zoomable" src="assets/certs/cert-alibaba-regional.jpg" alt="Regional Finalist certificate, Alibaba Cloud AI Hackathon Pakistan 2026">
+          <figcaption><b>EXHIBIT E-01</b>Regional Finalist. Alibaba Cloud AI Hackathon Pakistan 2026, Islamabad Regional Technical Evaluation.</figcaption>
+        </figure>
+        <figure class="evidence" data-slot>
+          <img class="zoomable" src="assets/certs/cert-alibaba-national.jpg" alt="National Final certificate of participation, Alibaba Cloud AI Hackathon Pakistan 2026">
+          <figcaption><b>EXHIBIT E-02</b>Certificate of Participation, National Final. Alibaba Cloud AI Hackathon Pakistan 2026.</figcaption>
+        </figure>
+        <figure class="evidence" data-slot>
+          <img class="zoomable" src="assets/certs/hackathon-team.jpg" alt="Team Ustad-e-Karigar at the hackathon">
+          <figcaption><b>EXHIBIT E-03</b>Team Ustad-e-Karigar, field photograph.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -469,7 +617,7 @@
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative">
           <div class="absolute top-4 right-4 font-vt text-crtgreen text-lg">LOG #8821</div>
           <div class="font-vt text-bloodbright text-xl">GAME DEVELOPMENT LEAD</div>
-          <div class="font-special text-lg text-bone mb-2">DevCore Student Organization, IST</div>
+          <div class="font-special text-lg text-bone mb-2"><img data-slot src="assets/logos/logo-devcore.png" alt="" class="inline-block h-7 w-7 object-contain mr-2 align-middle">DevCore Student Organization, IST</div>
           <p class="font-courier text-bone/90 text-base">
             Directing game development initiatives, organizing workshops, and mentoring student developers in engine architecture and gameplay mechanics.
           </p>
@@ -478,7 +626,7 @@
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative">
           <div class="absolute top-4 right-4 font-vt text-crtgreen text-lg">LOG #8822</div>
           <div class="font-vt text-bloodbright text-xl">TEACHING ASSISTANT INTERN (OOP & OOP LAB)</div>
-          <div class="font-special text-lg text-bone mb-2">Institute of Space Technology</div>
+          <div class="font-special text-lg text-bone mb-2"><img data-slot src="assets/logos/logo-ist.png" alt="" class="inline-block h-7 w-7 object-contain mr-2 align-middle">Institute of Space Technology</div>
           <p class="font-courier text-bone/90 text-base">
             Assisted faculty in conducting Object-Oriented Programming labs, evaluating code submissions, and guiding undergraduates on memory management and class design.
           </p>
@@ -504,7 +652,7 @@
 
           <a href="https://www.linkedin.com/in/abduhoo-bin-nasir-1643693a0/" target="_blank" class="p-4 bg-[#181414] border border-[#2e2424] hover:border-crtgreen transition flex items-center space-x-3 text-crtgreen group">
             <i class="fa-brands fa-linkedin text-bloodbright group-hover:scale-110 transition"></i>
-            <span>linkedin.com/in/abduhoo-bin-nasir</span>
+            <span>LinkedIn Profile</span>
           </a>
 
           <a href="https://github.com/abduhoo-bin-nasir" target="_blank" class="p-4 bg-[#181414] border border-[#2e2424] hover:border-crtgreen transition flex items-center space-x-3 text-crtgreen group sm:col-span-2">
@@ -521,6 +669,12 @@
   <footer class="bg-[#0c0a0a] border-t border-[#2a2222] py-6 px-4 text-center font-vt text-crtgreen tracking-widest text-lg">
     © 2026 Abduhoo Bin Nasir. End of recording.
   </footer>
+
+  <!-- Lightbox for zooming exhibits and certificates -->
+  <div id="lightbox" hidden role="dialog" aria-label="Image viewer">
+    <img alt="">
+    <div class="lb-hint">[ TAP TO CLOSE ]</div>
+  </div>
 
   <!-- JavaScript for Boot Sequence, Flashlight, and Timecode -->
   <script>
@@ -574,6 +728,7 @@
     // own when you're not touching, so it works with no mouse at all.
     (function flashlight() {
       const root = document.documentElement;
+      const photoBox = document.getElementById('photo-box');
       const touchOnly = window.matchMedia('(hover: none)');
       const IDLE_MS = 2200;
       let tx = innerWidth / 2, ty = innerHeight * 0.35;
@@ -598,6 +753,13 @@
         y += (ty - y) * 0.09;
         root.style.setProperty('--x', x.toFixed(1) + 'px');
         root.style.setProperty('--y', y.toFixed(1) + 'px');
+        if (photoBox) {
+          const r = photoBox.getBoundingClientRect();
+          if (r.bottom > 0 && r.top < innerHeight) {
+            photoBox.style.setProperty('--px', (x - r.left).toFixed(1) + 'px');
+            photoBox.style.setProperty('--py', (y - r.top).toFixed(1) + 'px');
+          }
+        }
         requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
@@ -613,6 +775,60 @@
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
       });
     });
+
+
+    // ---- Image slots: missing images quietly disappear, so the page never shows broken icons ----
+    function layoutExhibits() {
+      document.querySelectorAll('[data-exhibit]').forEach((ex) => {
+        const n = ex.querySelectorAll('figure').length;
+        if (!n) { ex.remove(); return; }
+        ex.classList.toggle('two', n > 1);
+      });
+    }
+    function refreshLocker() {
+      const sec = document.getElementById('evidence-locker');
+      const nav = document.getElementById('nav-evidence');
+      if (!sec) return;
+      const ok = [...sec.querySelectorAll('img')].some((i) => i.complete && i.naturalWidth > 0);
+      sec.hidden = !ok;
+      if (nav) nav.hidden = !ok;
+    }
+    function imgFail(img) {
+      const fb = (img.dataset.fallback || '').split('|').filter(Boolean);
+      if (fb.length) { img.dataset.fallback = fb.slice(1).join('|'); img.src = fb[0]; return; }
+      if (img.hasAttribute('data-keep')) return;
+      (img.closest('[data-card-optional]') || img.closest('[data-slot]') || img).remove();
+      layoutExhibits();
+      refreshLocker();
+    }
+    document.addEventListener('error', (e) => { if (e.target instanceof HTMLImageElement) imgFail(e.target); }, true);
+    document.addEventListener('load', (e) => { if (e.target instanceof HTMLImageElement) refreshLocker(); }, true);
+    document.querySelectorAll('img[src]').forEach((i) => { if (i.complete && i.naturalWidth === 0) imgFail(i); });
+    window.addEventListener('load', () => { layoutExhibits(); refreshLocker(); });
+    layoutExhibits();
+
+    // ---- Colour copy of the profile photo, revealed only under the torch ----
+    (function () {
+      const main = document.getElementById('photo-main');
+      const lit = document.getElementById('photo-lit');
+      if (!main || !lit) return;
+      const sync = () => { lit.src = main.currentSrc || main.src; };
+      main.addEventListener('load', sync);
+      if (main.complete && main.naturalWidth > 0) sync();
+    })();
+
+    // ---- Lightbox ----
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = lb.querySelector('img');
+      const close = () => { lb.hidden = true; document.body.style.overflow = ''; };
+      document.addEventListener('click', (e) => {
+        const z = e.target.closest && e.target.closest('img.zoomable');
+        if (z) { lbImg.src = z.currentSrc || z.src; lbImg.alt = z.alt; lb.hidden = false; document.body.style.overflow = 'hidden'; return; }
+        if (!lb.hidden) close();
+      });
+      addEventListener('keydown', (e) => { if (e.key === 'Escape' && !lb.hidden) close(); });
+    })();
 
     // Live timecode updater
     function updateTimecode() {
