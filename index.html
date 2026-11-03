@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
   
+  <script>document.documentElement.classList.add('js')</script>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -61,7 +62,7 @@
       z-index: 90;
       background: linear-gradient(
         rgba(18, 16, 16, 0) 50%,
-        rgba(0, 0, 0, 0.12) 50%
+        rgba(0, 0, 0, 0.07) 50%
       );
       background-size: 100% 4px;
     }
@@ -72,7 +73,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 89;
-      box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.55), inset 0 0 140px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.32), inset 0 0 140px rgba(0, 0, 0, 0.16);
       animation: crtFlicker 0.15s infinite;
       opacity: 0.85;
     }
@@ -93,10 +94,10 @@
       z-index: 88;
       background: radial-gradient(
         circle var(--r) at var(--x) var(--y),
-        rgba(255, 236, 200, 0.07) 0%,
-        rgba(255, 236, 200, 0.03) 35%,
-        rgba(12, 10, 10, 0.18) 60%,
-        rgba(12, 10, 10, 0.42) 100%
+        rgba(255, 238, 205, 0.14) 0%,
+        rgba(255, 238, 205, 0.06) 40%,
+        rgba(12, 10, 10, 0.05) 65%,
+        rgba(12, 10, 10, 0.18) 100%
       );
     }
 
@@ -296,6 +297,91 @@
     #lightbox img { max-width: 96vw; max-height: 88vh; object-fit: contain; box-shadow: 0 0 40px rgba(0,0,0,.8); }
     #lightbox .lb-hint { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font-family: 'VT323', monospace; font-size: 1.2rem; color: #8fb89a; letter-spacing: 2px; }
 
+
+    /* ================= v3: night scene, brightness, flair ================= */
+    html { background: #0c0a0a; }
+    body { background-color: transparent !important; }
+
+    /* cards let a little of the sky through and are a notch lighter */
+    .bg-\[\#121010\] { background-color: rgba(30, 25, 24, .91) !important; }
+    section > div:first-child { display: block; width: fit-content; background: rgba(12,10,10,.62); padding: 0 10px; border-radius: 2px; }
+    section > h2 { text-shadow: 0 2px 14px rgba(0,0,0,.85); }
+
+    /* ---- sky (behind everything) ---- */
+    #scene {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+      --sky-top: #273f4a; --sky-mid: #4a4440; --sky-bot: #5b4a38;
+      background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-bot) 100%);
+    }
+    #stars { position: absolute; inset: 0; opacity: var(--stars, 1); background-image: radial-gradient(1.5px 1.5px at 45.4% 35.6%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1px 1px at 50.8% 37.2%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1px 1px at 62.5% 49.6%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1px 1px at 31.1% 7.4%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 94.6% 41.2%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1px 1px at 61.8% 51.9%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 5.4% 54.8%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 76.7% 21.6%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 51.8% 40.4%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.2px 1.2px at 65.6% 29.4%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1px 1px at 97.8% 61.7%, rgba(255,255,255,0.8) 50%, transparent 55%),radial-gradient(1.2px 1.2px at 32.3% 15.8%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 8.7% 48.0%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1px 1px at 83.3% 25.2%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1px 1px at 22.5% 57.6%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 38.0% 44.5%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.2px 1.2px at 56.4% 13.9%, rgba(255,255,255,0.8) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 10.4% 22.0%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1px 1px at 14.9% 44.4%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 46.6% 31.2%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1px 1px at 45.0% 13.4%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 63.8% 9.0%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 2.0% 53.9%, rgba(255,255,255,0.8) 50%, transparent 55%),radial-gradient(1px 1px at 97.8% 3.2%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 97.6% 38.1%, rgba(255,255,255,0.45) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 6.0% 10.8%, rgba(255,255,255,0.8) 50%, transparent 55%),radial-gradient(1.2px 1.2px at 2.9% 38.6%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 9.0% 7.4%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 3.5% 24.1%, rgba(255,255,255,0.95) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 14.2% 37.2%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1px 1px at 85.2% 13.0%, rgba(255,255,255,0.8) 50%, transparent 55%),radial-gradient(1px 1px at 89.2% 51.1%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1.8px 1.8px at 17.2% 39.7%, rgba(255,255,255,0.6) 50%, transparent 55%),radial-gradient(1.5px 1.5px at 67.9% 25.3%, rgba(255,255,255,0.45) 50%, transparent 55%); animation: twinkle 5s ease-in-out infinite alternate; }
+    @keyframes twinkle { from { opacity: calc(var(--stars, 1) * .75); } to { opacity: var(--stars, 1); } }
+    #moon {
+      position: absolute; left: 0; top: 0; width: clamp(110px, 20vmin, 210px); aspect-ratio: 1; border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 32%, rgba(0,0,0,.14) 0 7%, transparent 8%),
+        radial-gradient(circle at 62% 58%, rgba(0,0,0,.12) 0 10%, transparent 11%),
+        radial-gradient(circle at 48% 22%, rgba(0,0,0,.10) 0 5%, transparent 6%),
+        radial-gradient(circle at 36% 34%, var(--moon-hi, #f6f1de) 0%, var(--moon-lo, #cdc6ae) 62%, var(--moon-edge, #9d957f) 100%);
+      box-shadow: 0 0 50px 14px var(--moon-glow, rgba(245,240,215,.30)), 0 0 150px 50px var(--moon-glow2, rgba(245,240,215,.12));
+      will-change: transform;
+    }
+    .fog { position: absolute; left: -30%; width: 160%; height: 40vh; bottom: 7vh;
+      background: radial-gradient(ellipse at 50% 60%, rgba(225,235,230,.22), transparent 68%);
+      opacity: var(--fog, .4); animation: drift 40s ease-in-out infinite alternate; will-change: transform; }
+    .fog.b { bottom: 19vh; height: 30vh; animation-duration: 56s; animation-direction: alternate-reverse; opacity: calc(var(--fog, .4) * .8); }
+    @keyframes drift { from { transform: translateX(-9%); } to { transform: translateX(9%); } }
+    #skyline { position: absolute; left: 0; right: 0; bottom: 0; height: 27vh; min-height: 150px; }
+    #skyline .wf { animation: winflick 3.2s steps(1) infinite; }
+    @keyframes winflick { 0%,40%,100% { opacity: .85; } 45%,55% { opacity: 0; } 60% { opacity: .85; } 70% { opacity: .1; } }
+    #eyes { position: absolute; left: 9vw; bottom: 11vh; width: 34px; height: 10px; opacity: 0; transition: opacity 1.4s; }
+    #eyes.on { opacity: 1; }
+    #eyes i { position: absolute; top: 0; width: 9px; height: 9px; border-radius: 50%; background: #ff3b2f; box-shadow: 0 0 10px 3px rgba(255,59,47,.8); animation: eyeblink 6s infinite; }
+    #eyes i:first-child { left: 0; } #eyes i:last-child { right: 0; }
+    @keyframes eyeblink { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.05); } }
+
+    /* ---- foreground: one slow bullet, driven by scroll position ---- */
+    #fx { position: fixed; inset: 0; z-index: 45; pointer-events: none; overflow: hidden; }
+    #bullet { position: absolute; left: 0; top: 40vh; width: 190px; height: 16px; margin-top: -8px; opacity: .92; will-change: transform;
+      filter: drop-shadow(0 0 8px rgba(255,179,71,.55)); }
+    #bullet svg { display: block; }
+
+    /* ---- blood meter (scroll progress) ---- */
+    #bloodbar { position: fixed; top: 0; left: 0; height: 3px; width: calc(var(--p, 0) * 100%); z-index: 60; pointer-events: none;
+      background: linear-gradient(90deg, #5e0f0e, #d23a32); box-shadow: 0 0 10px 1px rgba(210,58,50,.8); }
+    #bloodbar::after { content: ""; opacity: min(1, calc(var(--p, 0) * 60)); position: absolute; right: -3px; top: 1px; width: 7px; height: 11px; border-radius: 50% 50% 55% 55% / 60% 60% 45% 45%;
+      background: radial-gradient(circle at 35% 30%, #ff8a80 0 12%, #d23a32 45%, #8c1b19 100%); animation: bardrip 2.4s ease-in infinite; }
+    @keyframes bardrip { 0% { transform: translateY(0) scale(.6); opacity: 0; } 15% { opacity: 1; transform: translateY(2px) scale(1); } 100% { transform: translateY(26px) scale(.9); opacity: 0; } }
+
+    /* ---- bleeding section headings ---- */
+    section > h2 { position: relative; }
+    .drips { position: absolute; left: 0; top: 100%; width: 100%; height: 0; pointer-events: none; z-index: 3; }
+    .drips i { position: absolute; top: -3px; left: var(--x); width: 4px; height: 0; border-radius: 0 0 2px 2px;
+      background: linear-gradient(#7d1716, #c4302a); transition: height var(--t, 1.8s) cubic-bezier(.45,0,.85,1) var(--d, 0s); }
+    .drips i::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 7px; height: 10px; transform: translateX(-50%);
+      border-radius: 50% 50% 55% 55% / 60% 60% 45% 45%; background: radial-gradient(circle at 35% 30%, #ff8a80 0 12%, #d23a32 42%, #8c1b19 100%); }
+    section.in .drips i { height: var(--len); }
+    .drips b { position: absolute; left: calc(var(--x) - 2px); top: calc(var(--len) + 2px); width: 7px; height: 9px; opacity: 0;
+      border-radius: 50% 50% 55% 55% / 60% 60% 45% 45%; background: radial-gradient(circle at 35% 30%, #ff8a80 0 12%, #d23a32 42%, #8c1b19 100%); }
+    section.in .drips b { animation: fall 5.5s ease-in infinite var(--fd, 3s); }
+    @keyframes fall { 0% { transform: translateY(0); opacity: 0; } 6% { opacity: 1; } 65% { transform: translateY(80px); opacity: .9; } 100% { transform: translateY(125px); opacity: 0; } }
+
+    /* ---- scroll reveal + hover glow ---- */
+    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .75s ease, transform .75s ease, border-color .2s, box-shadow .3s !important; }
+    .js .reveal.in { opacity: 1; transform: none; }
+    section div[class*="bg-[#121010]"]:hover { box-shadow: 0 0 0 1px rgba(210,58,50,.35), 0 14px 40px -10px rgba(210,58,50,.28); }
+
+    /* featured case file + stamp pulse */
+    .stamp.active { border-color: #d23a32; color: #ff5a4e; transform: rotate(9deg); animation: stampPulse 2.4s ease-in-out infinite; }
+    @keyframes stampPulse { 0%,100% { opacity: .85; box-shadow: 0 0 0 rgba(210,58,50,0); } 50% { opacity: 1; box-shadow: 0 0 16px rgba(210,58,50,.55); } }
+    .quote-line { font-family: 'VT323', monospace; font-size: 1.15rem; color: #ff6a5e; letter-spacing: 1px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      #fx, #bloodbar, .drips, #eyes, .bullet, #flash { display: none !important; }
+      .fog, #stars, #skyline .wf { animation: none !important; }
+      .js .reveal { opacity: 1 !important; transform: none !important; }
+      .stamp.active { animation: none !important; }
+    }
+
     /* Reduced Motion Accessibility */
     @media (prefers-reduced-motion: reduce) {
       #flashlight, .scanlines, .crt-vignette {
@@ -308,6 +394,18 @@
   </style>
 </head>
 <body class="relative min-h-screen flex flex-col justify-between selection:bg-blood selection:text-bone">
+
+
+  <!-- Night scene: sky, moon, fog, skyline (scroll-driven) -->
+  <div id="scene" aria-hidden="true">
+    <div id="stars"></div>
+    <div id="moon"></div>
+    <div class="fog"></div><div class="fog b"></div>
+    <div id="skyline"><svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" width="100%" height="100%" aria-hidden="true"><rect x="-30" y="144" width="90" height="76" fill="#17130f" opacity=".9"/><rect x="14" y="118" width="2" height="26" fill="#17130f" opacity=".9"/><rect x="55" y="118" width="96" height="102" fill="#17130f" opacity=".9"/><rect x="102" y="92" width="2" height="26" fill="#17130f" opacity=".9"/><rect x="157" y="97" width="80" height="123" fill="#17130f" opacity=".9"/><rect x="246" y="84" width="82" height="136" fill="#17130f" opacity=".9"/><rect x="286" y="58" width="2" height="26" fill="#17130f" opacity=".9"/><rect x="324" y="121" width="72" height="99" fill="#17130f" opacity=".9"/><rect x="392" y="123" width="81" height="97" fill="#17130f" opacity=".9"/><rect x="473" y="148" width="111" height="72" fill="#17130f" opacity=".9"/><rect x="527" y="122" width="2" height="26" fill="#17130f" opacity=".9"/><rect x="591" y="119" width="92" height="101" fill="#17130f" opacity=".9"/><rect x="636" y="93" width="2" height="26" fill="#17130f" opacity=".9"/><rect x="682" y="103" width="82" height="117" fill="#17130f" opacity=".9"/><rect x="762" y="104" width="69" height="116" fill="#17130f" opacity=".9"/><rect x="795" y="78" width="2" height="26" fill="#17130f" opacity=".9"/><rect x="839" y="84" width="85" height="136" fill="#17130f" opacity=".9"/><rect x="922" y="146" width="101" height="74" fill="#17130f" opacity=".9"/><rect x="1032" y="111" width="86" height="109" fill="#17130f" opacity=".9"/><rect x="1112" y="141" width="102" height="79" fill="#17130f" opacity=".9"/><rect x="1217" y="133" width="84" height="87" fill="#17130f" opacity=".9"/><rect x="1297" y="81" width="92" height="139" fill="#17130f" opacity=".9"/><rect x="1384" y="134" width="111" height="86" fill="#17130f" opacity=".9"/><rect x="-30" y="170" width="86" height="50" fill="#090808" opacity="1"/><rect x="52" y="166" width="69" height="54" fill="#090808" opacity="1"/><rect x="117" y="178" width="94" height="42" fill="#090808" opacity="1"/><rect x="163" y="152" width="2" height="26" fill="#090808" opacity="1"/><rect x="219" y="150" width="95" height="70" fill="#090808" opacity="1"/><rect x="316" y="159" width="116" height="61" fill="#090808" opacity="1"/><rect x="373" y="133" width="2" height="26" fill="#090808" opacity="1"/><rect x="427" y="145" width="107" height="75" fill="#090808" opacity="1"/><rect x="544" y="160" width="96" height="60" fill="#090808" opacity="1"/><rect x="644" y="139" width="93" height="81" fill="#090808" opacity="1"/><rect x="733" y="124" width="66" height="96" fill="#090808" opacity="1"/><rect x="807" y="106" width="95" height="114" fill="#090808" opacity="1"/><rect x="911" y="159" width="69" height="61" fill="#090808" opacity="1"/><rect x="944" y="133" width="2" height="26" fill="#090808" opacity="1"/><rect x="989" y="140" width="97" height="80" fill="#090808" opacity="1"/><rect x="1036" y="114" width="2" height="26" fill="#090808" opacity="1"/><rect x="1086" y="153" width="97" height="67" fill="#090808" opacity="1"/><rect x="1185" y="168" width="88" height="52" fill="#090808" opacity="1"/><rect x="1277" y="156" width="96" height="64" fill="#090808" opacity="1"/><rect x="1372" y="122" width="90" height="98" fill="#090808" opacity="1"/><rect x="1462" y="157" width="110" height="63" fill="#090808" opacity="1"/><rect x="1516" y="131" width="2" height="26" fill="#090808" opacity="1"/><rect x="110" y="195" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="124" y="207" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="468" y="153" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="502" y="174" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="485" y="195" width="8" height="11" fill="#d23a32" opacity=".85"/><rect x="502" y="195" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="585" y="168" width="8" height="11" fill="#d23a32" opacity=".85"/><rect x="740" y="174" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="814" y="114" width="8" height="11" fill="#e0a458" opacity=".85"/><rect class="wf" x="882" y="177" width="8" height="11" fill="#d23a32" opacity=".85"/><rect x="1013" y="148" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1047" y="148" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1064" y="148" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1030" y="169" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1030" y="190" width="8" height="11" fill="#d23a32" opacity=".85"/><rect x="1209" y="197" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1301" y="164" width="8" height="11" fill="#d23a32" opacity=".85"/><rect x="1318" y="185" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1352" y="185" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1352" y="206" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1430" y="130" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1447" y="130" width="8" height="11" fill="#d23a32" opacity=".85"/><rect x="1503" y="165" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1537" y="165" width="8" height="11" fill="#e0a458" opacity=".85"/><rect x="1537" y="207" width="8" height="11" fill="#e0a458" opacity=".85"/></svg></div>
+    <div id="eyes"><i></i><i></i></div>
+  </div>
+  <div id="fx" aria-hidden="true"><div id="bullet"><svg viewBox="0 0 190 16" width="190" height="16" aria-hidden="true"><defs><linearGradient id="blt" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#e0a458" stop-opacity="0"/><stop offset="1" stop-color="#ffd98a" stop-opacity=".7"/></linearGradient><linearGradient id="blb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3cd7a"/><stop offset=".55" stop-color="#c8903a"/><stop offset="1" stop-color="#7a4f1c"/></linearGradient><linearGradient id="blc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8a06a"/><stop offset="1" stop-color="#8a3f1e"/></linearGradient></defs><rect x="52" y="5.5" width="138" height="5" fill="url(#blt)"/><rect x="34" y="3" width="42" height="10" rx="2" fill="url(#blb)"/><rect x="62" y="3" width="2" height="10" fill="#7a4f1c" opacity=".7"/><rect x="70" y="3" width="2" height="10" fill="#7a4f1c" opacity=".5"/><path d="M34 3C22 3 12 6 3 8c9 2 19 5 31 5z" fill="url(#blc)"/><rect x="8" y="4.6" width="58" height="1.2" fill="#fff" opacity=".45"/></svg></div></div>
+  <div id="bloodbar" aria-hidden="true"></div>
 
   <!-- Scanlines & CRT Effects -->
   <div class="scanlines"></div>
@@ -385,7 +483,7 @@
           </p>
 
           <p>
-            I work in C++ systems architecture and low-level software design. I build engines from the ground up, including raycasting renderers with a custom DDA algorithm, and I write P2P multiplayer networking for real-time games. I like clean class hierarchies and knowing <span class="redacted" title="Hover or tap to reveal">exactly what the machine is doing underneath</span>.
+            I work in C++ systems architecture and low-level software design. I build engines from the ground up, including ASCII and DDA raycasting renderers, offline local LLM pipelines, and P2P multiplayer networking for real-time games. I like clean class hierarchies, explicit data structures, and knowing <span class="redacted" title="Hover or tap to reveal">exactly how everything works under the hood</span>.
           </p>
 
           <div class="pt-2 flex flex-wrap gap-3 font-vt text-lg">
@@ -431,6 +529,7 @@
             <li class="flex items-center space-x-2"><span class="text-bloodbright">▸</span> <span>Raycasting (DDA)</span></li>
             <li class="flex items-center space-x-2"><span class="text-bloodbright">▸</span> <span>P2P Networking</span></li>
             <li class="flex items-center space-x-2"><span class="text-bloodbright">▸</span> <span>EOS (Epic Online Services)</span></li>
+            <li class="flex items-center space-x-2"><span class="text-bloodbright">▸</span> <span>Local AI (whisper.cpp, llama.cpp, Piper)</span></li>
             <li class="flex items-center space-x-2"><span class="text-bloodbright">▸</span> <span>Qt</span></li>
           </ul>
         </div>
@@ -458,15 +557,49 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <!-- Project 1: Blood Sector -->
+        <!-- Project 1: WATCH-MAN (featured) -->
+        <div class="md:col-span-2 bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-bloodbright/70 transition">
+          <div class="stamp active">ACTIVE OPERATION</div>
+          <div class="md:grid md:grid-cols-[1.12fr_1fr] md:gap-8 md:items-start">
+            <div class="exhibit" data-exhibit>
+              <figure data-slot><img class="zoomable" src="assets/projects/watch-man-1.jpg" alt="WATCH-MAN gameplay: a first-person view down a dim apartment corridor with a ceiling lamp, a window, doors and a figure with a dog in the distance"><figcaption>EXHIBIT 001-A</figcaption></figure>
+              <figure data-slot><img class="zoomable" src="assets/projects/watch-man-2.jpg" alt="WATCH-MAN gameplay screenshot 2"><figcaption>EXHIBIT 001-B</figcaption></figure>
+            </div>
+            <div>
+              <div class="font-vt text-bloodbright text-xl mb-1">CASE FILE #001</div>
+              <h3 class="font-special text-3xl text-bone mb-2">WATCH-MAN</h3>
+              <p class="quote-line mb-3">&ldquo;Case loaded. Don't expect me to enjoy it.&rdquo;</p>
+              <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
+                <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">C++17</span>
+                <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">Raylib</span>
+                <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">Raycaster</span>
+                <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">llama.cpp</span>
+                <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">whisper.cpp</span>
+                <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">DSA</span>
+              </div>
+              <p class="font-courier text-bone/90 text-sm md:text-base leading-relaxed mb-6">
+                A bleak, 2030 first-person detective game built from scratch in C++17. Features a custom raycasting engine and a hostile watch AI driven by fully offline voice STT/LLM pipelines. Core mechanics leverage explicit DSA architectures (Graphs, Tries, DAG Topological Sorting, Hash Maps).
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-[#2a2222] flex justify-between items-center">
+            <span class="font-vt text-xs opacity-60">CASE FILE #001 // ABN</span>
+            <a href="https://github.com/abduhoo-bin-nasir/watch-man" target="_blank" class="inline-flex items-center space-x-2 px-4 py-2 bg-blood text-bone font-special text-xs tracking-wider rounded hover:bg-bloodbright transition">
+              <i class="fa-brands fa-github"></i>
+              <span>View Source Code</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 2: Blood Sector -->
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-blood/60 transition">
           <div class="stamp">CLASSIFIED</div>
           <div>
             <div class="exhibit two" data-exhibit>
-            <figure data-slot><img class="zoomable" src="assets/projects/blood-sector-1.jpg" alt="Blood Sector screenshot 1"><figcaption>EXHIBIT 001-A</figcaption></figure>
-            <figure data-slot><img class="zoomable" src="assets/projects/blood-sector-2.jpg" alt="Blood Sector screenshot 2"><figcaption>EXHIBIT 001-B</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/blood-sector-1.jpg" alt="Blood Sector screenshot 1"><figcaption>EXHIBIT 002-A</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/blood-sector-2.jpg" alt="Blood Sector screenshot 2"><figcaption>EXHIBIT 002-B</figcaption></figure>
           </div>
-            <div class="font-vt text-bloodbright text-xl mb-1">CASE FILE #001</div>
+            <div class="font-vt text-bloodbright text-xl mb-1">CASE FILE #002</div>
             <h3 class="font-special text-2xl text-bone mb-3">Blood Sector</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
               <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">C++</span>
@@ -478,7 +611,7 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">CASE FILE #001 // EOF</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #002 // EOF</span>
             <a href="https://github.com/abduhoo-bin-nasir/Blood-Sector" target="_blank" class="inline-flex items-center space-x-2 px-4 py-2 bg-blood text-bone font-special text-xs tracking-wider rounded hover:bg-bloodbright transition">
               <i class="fa-brands fa-github"></i>
               <span>View Source Code</span>
@@ -486,15 +619,15 @@
           </div>
         </div>
 
-        <!-- Project 2: Which Way, Good Sir? / Cartographer -->
+        <!-- Project 3: Which Way, Good Sir? / Cartographer -->
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp confidential">CONFIDENTIAL</div>
           <div>
             <div class="exhibit two" data-exhibit>
-            <figure data-slot><img class="zoomable" src="assets/projects/which-way-good-sir-1.jpg" alt="Which Way Good Sir screenshot 1"><figcaption>EXHIBIT 002-A</figcaption></figure>
-            <figure data-slot><img class="zoomable" src="assets/projects/which-way-good-sir-2.jpg" alt="Which Way Good Sir screenshot 2"><figcaption>EXHIBIT 002-B</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/which-way-good-sir-1.jpg" alt="Which Way Good Sir screenshot 1"><figcaption>EXHIBIT 003-A</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/which-way-good-sir-2.jpg" alt="Which Way Good Sir screenshot 2"><figcaption>EXHIBIT 003-B</figcaption></figure>
           </div>
-            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #002</div>
+            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #003</div>
             <h3 class="font-special text-2xl text-bone mb-3">Which Way, Good Sir? / Cartographer</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
               <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">Godot 4</span>
@@ -506,19 +639,19 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">CASE FILE #002 // EOF</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #003 // EOF</span>
             <span class="font-vt text-xs text-bone/40 italic">SOURCE CODE RESTRICTED</span>
           </div>
         </div>
 
-        <!-- Project 3: Ustad-e-Karigar -->
+        <!-- Project 4: Ustad-e-Karigar -->
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp restricted">RESTRICTED</div>
           <div>
             <div class="exhibit" data-exhibit>
-            <figure data-slot><img class="zoomable" src="assets/projects/ustad-e-karigar-1.jpg" alt="Ustad E Karigar screenshot 1"><figcaption>EXHIBIT 003-A</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/ustad-e-karigar-1.jpg" alt="Ustad E Karigar screenshot 1"><figcaption>EXHIBIT 004-A</figcaption></figure>
           </div>
-            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #003</div>
+            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #004</div>
             <h3 class="font-special text-2xl text-bone mb-3">Ustad-e-Karigar</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
               <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">Python</span>
@@ -530,19 +663,19 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">CASE FILE #003 // EOF</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #004 // EOF</span>
             <span class="font-vt text-xs text-bone/40 italic">SOURCE CODE RESTRICTED</span>
           </div>
         </div>
 
-        <!-- Project 4: Takeaway -->
+        <!-- Project 5: Takeaway -->
         <div class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp decrypted">DECRYPTED</div>
           <div>
             <div class="exhibit" data-exhibit>
-            <figure data-slot><img class="zoomable" src="assets/projects/takeaway-1.jpg" alt="Takeaway screenshot 1"><figcaption>EXHIBIT 004-A</figcaption></figure>
+            <figure data-slot><img class="zoomable" src="assets/projects/takeaway-1.jpg" alt="Takeaway screenshot 1"><figcaption>EXHIBIT 005-A</figcaption></figure>
           </div>
-            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #004</div>
+            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #005</div>
             <h3 class="font-special text-2xl text-bone mb-3">Takeaway</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
               <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">PHP</span>
@@ -554,20 +687,20 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">CASE FILE #004 // EOF</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #005 // EOF</span>
             <span class="font-vt text-xs text-bone/40 italic">SOURCE CODE RESTRICTED</span>
           </div>
         </div>
 
 
-        <!-- Project 5: Ultimate Tic Tac Toe (appears only once its screenshot is uploaded) -->
+        <!-- Project 6: Ultimate Tic Tac Toe (appears only once its screenshot is uploaded) -->
         <div data-card-optional class="bg-[#121010] p-6 rounded border border-[#2a2222] relative overflow-hidden flex flex-col justify-between shadow-lg hover:border-crtgreen/60 transition">
           <div class="stamp decrypted">ARCHIVED</div>
           <div>
             <div class="exhibit" data-exhibit>
-              <figure><img class="zoomable" src="assets/projects/ultimate-tic-tac-toe.png" alt="Ultimate Tic Tac Toe screenshot"><figcaption>EXHIBIT 005-A</figcaption></figure>
+              <figure><img class="zoomable" src="assets/projects/ultimate-tic-tac-toe.png" alt="Ultimate Tic Tac Toe screenshot"><figcaption>EXHIBIT 006-A</figcaption></figure>
             </div>
-            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #005</div>
+            <div class="font-vt text-crtgreen text-xl mb-1">CASE FILE #006</div>
             <h3 class="font-special text-2xl text-bone mb-3">Ultimate Tic Tac Toe</h3>
             <div class="flex flex-wrap gap-2 mb-4 font-vt text-sm">
               <span class="px-2 py-0.5 bg-[#1a1616] text-crtgreen border border-crtgreen/30">C++</span>
@@ -579,7 +712,7 @@
             </p>
           </div>
           <div class="pt-4 border-t border-[#2a2222] flex justify-between items-center">
-            <span class="font-vt text-xs opacity-60">CASE FILE #005 // EOF</span>
+            <span class="font-vt text-xs opacity-60">CASE FILE #006 // EOF</span>
           </div>
         </div>
 
@@ -844,6 +977,105 @@
       if (el) el.textContent = timeStr;
     }
     setInterval(updateTimecode, 1000);
+  </script>
+
+  <script>
+  // ===== v3: scroll-driven night scene, bleeding headings, gunshot =====
+  (function () {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
+    const $ = (id) => document.getElementById(id);
+    const scene = $('scene'), moon = $('moon'), eyes = $('eyes'), bullet = $('bullet');
+    const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    const css = (a) => `rgb(${a[0]},${a[1]},${a[2]})`;
+    function ramp(stops, p) {
+      for (let i = 1; i < stops.length; i++) {
+        if (p <= stops[i][0]) { const t = (p - stops[i-1][0]) / (stops[i][0] - stops[i-1][0] || 1); return mix(hex(stops[i-1][1]), hex(stops[i][1]), t); }
+      }
+      return hex(stops[stops.length - 1][1]);
+    }
+    const SKY_TOP = [[0,'#273f4a'],[.4,'#262a42'],[.75,'#2d1a2c'],[1,'#2e0f13']];
+    const SKY_BOT = [[0,'#5b4a38'],[.4,'#5d3b30'],[.75,'#612828'],[1,'#4c1616']];
+    const M_HI  = [[0,'#f6f1de'],[.55,'#f3d9c0'],[1,'#f0594a']];
+    const M_LO  = [[0,'#cdc6ae'],[.55,'#d49a82'],[1,'#b3231f']];
+    const M_EDG = [[0,'#9d957f'],[.55,'#a06a58'],[1,'#5c0f0f']];
+    const M_GLW = [[0,'#f5f0d7'],[.55,'#f3c9a6'],[1,'#e0352b']];
+    const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const smooth = (t) => t * t * (3 - 2 * t);
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    // the bullet eases toward its scroll target, so it feels heavy and slow
+    let bx = null, btx = 0, braf = 0;
+    function bulletStep() {
+      braf = 0;
+      if (bx === null) bx = btx;
+      bx += (btx - bx) * 0.07;
+      bullet.style.transform = `translate(${bx.toFixed(1)}px,0)`;
+      if (Math.abs(btx - bx) > 0.4) braf = requestAnimationFrame(bulletStep);
+    }
+
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const max = Math.max(1, root.scrollHeight - innerHeight);
+      const p = clamp(scrollY / max);
+      const vw = innerWidth, vh = innerHeight;
+      root.style.setProperty('--p', p.toFixed(4));
+
+      const top = ramp(SKY_TOP, p), bot = ramp(SKY_BOT, p);
+      scene.style.setProperty('--sky-top', css(top));
+      scene.style.setProperty('--sky-bot', css(bot));
+      scene.style.setProperty('--sky-mid', css(mix(top, bot, .55)));
+      scene.style.setProperty('--stars', clamp(1 - p * 1.5).toFixed(2));
+      scene.style.setProperty('--fog', (.28 + p * .5).toFixed(2));
+
+      const e = smooth(p), w = moon.offsetWidth;
+      const mx = lerp(.80, .64, e) * vw - w / 2, my = lerp(.82, .17, e) * vh - w / 2, ms = lerp(.8, 1.3, e);
+      moon.style.transform = `translate(${mx.toFixed(1)}px,${my.toFixed(1)}px) scale(${ms.toFixed(3)})`;
+      const glow = ramp(M_GLW, p);
+      moon.style.setProperty('--moon-hi', css(ramp(M_HI, p)));
+      moon.style.setProperty('--moon-lo', css(ramp(M_LO, p)));
+      moon.style.setProperty('--moon-edge', css(ramp(M_EDG, p)));
+      moon.style.setProperty('--moon-glow', `rgba(${glow[0]},${glow[1]},${glow[2]},${(.28 + p * .22).toFixed(2)})`);
+      moon.style.setProperty('--moon-glow2', `rgba(${glow[0]},${glow[1]},${glow[2]},${(.12 + p * .12).toFixed(2)})`);
+
+      // the bullet crosses the screen as you scroll (right to left going down, back again going up)
+      btx = lerp(vw + 20, -200, p);
+      if (!braf) braf = requestAnimationFrame(bulletStep);
+      eyes.classList.toggle('on', p > .9);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    update();
+    if (!reduce) { addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); }
+
+    // ----- bleeding headings -----
+    document.querySelectorAll('main > section > h2').forEach((h) => {
+      const box = document.createElement('span');
+      box.className = 'drips'; box.setAttribute('aria-hidden', 'true');
+      const span = Math.min(h.offsetWidth || 600, 560);
+      for (let i = 0; i < 5; i++) {
+        const x = Math.round(14 + Math.random() * (span - 28));
+        const len = Math.round(16 + Math.random() * 30);
+        const i1 = document.createElement('i');
+        i1.style.cssText = `--x:${x}px;--len:${len}px;--t:${(1.4 + Math.random() * 1.4).toFixed(2)}s;--d:${(.2 + Math.random()).toFixed(2)}s`;
+        const b1 = document.createElement('b');
+        b1.style.cssText = `--x:${x}px;--len:${len}px;--fd:${(2 + Math.random() * 6).toFixed(1)}s`;
+        box.appendChild(i1); box.appendChild(b1);
+      }
+      h.appendChild(box);
+    });
+
+    // ----- reveal on scroll + mark sections "in" -----
+    document.querySelectorAll('section div[class*="bg-[#121010]"]').forEach((el) => el.classList.add('reveal'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('main > section, .reveal').forEach((el) => io.observe(el));
+    // stagger siblings a little
+    document.querySelectorAll('.grid').forEach((g) => [...g.children].forEach((c, i) => { if (c.classList.contains('reveal')) c.style.transitionDelay = (i * 70) + 'ms'; }));
+
+  })();
   </script>
 
 </body>
