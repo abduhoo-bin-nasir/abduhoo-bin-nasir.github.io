@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="44" viewBox="0 0 1200 44" role="img" aria-label="Scrolling ticker: no return address, archive 042, the feed is not empty.">
+<style>text{font-family:'Courier New', Courier, 'DejaVu Sans Mono', 'Liberation Mono', monospace}.roll{animation:roll 45s linear infinite}@keyframes roll{to{transform:translateX(-1436px)}}.bk{animation:bk 1.2s steps(1) infinite}@keyframes bk{0%,55%{opacity:1}56%,100%{opacity:0}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<defs><pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1.4" fill="#000" opacity=".28"/></pattern><linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#0a0808"/><stop offset=".08" stop-color="#0a0808" stop-opacity="0"/><stop offset=".92" stop-color="#0a0808" stop-opacity="0"/><stop offset="1" stop-color="#0a0808"/></linearGradient></defs>
+<rect width="1200" height="44" fill="#0a0808"/>
+<path d="M0 .5H1200M0 43.5H1200" stroke="#2a2222"/>
+<g class="roll"><text x="0" y="27" font-size="13" letter-spacing="3" fill="#8fb89a" textLength="1436" lengthAdjust="spacing" xml:space="preserve">▪ NO RETURN ADDRESS ▪ 0x5741544348 ▪ ARCHIVE #042 ▪ C++17 ▪ THE FEED IS NOT EMPTY ▪ SIGNAL STRONG ▪ DO NOT LOOK AWAY ▪ 3D 2E 2E 2E ▪ </text>
+<text x="1436" y="27" font-size="13" letter-spacing="3" fill="#8fb89a" textLength="1436" lengthAdjust="spacing" xml:space="preserve">▪ NO RETURN ADDRESS ▪ 0x5741544348 ▪ ARCHIVE #042 ▪ C++17 ▪ THE FEED IS NOT EMPTY ▪ SIGNAL STRONG ▪ DO NOT LOOK AWAY ▪ 3D 2E 2E 2E ▪ </text></g>
+<rect width="1200" height="44" fill="url(#fade)"/>
+<rect width="1200" height="44" fill="url(#scan)" />
+<circle class="bk" cx="22" cy="22" r="4" fill="#d23a32"/>
+</svg>

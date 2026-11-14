@@ -259,7 +259,7 @@ footer{text-align:center;padding:2.2rem 1rem 3rem;border-top:1px solid var(--lin
 .fx{position:absolute;z-index:0!important;pointer-events:none;user-select:none}
 .splat{width:min(34vw,380px);opacity:.5}
 .hole{width:min(20vw,200px);opacity:.75}
-.top-r{top:-30px;right:-10px}
+.top-r{top:-100px;right:-10px}
 .mid-r{top:50%;right:-20px;transform:translateY(-40%)}
 .gap-l{bottom:-110px;left:-30px}
 .s2{transform:rotate(70deg)}
@@ -271,4 +271,63 @@ footer{text-align:center;padding:2.2rem 1rem 3rem;border-top:1px solid var(--lin
   .fx.top-r,.fx.mid-r,.fx-paper{display:none}
   .fx.gap-l{width:110px;bottom:-95px}
   .wall{max-width:320px}
+}
+
+
+/* =================== v3: signal 042 =================== */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.28}
+
+/* hero */
+.hero{position:relative;max-width:none;margin:0;padding:0;display:block;min-height:min(92vh,840px);overflow:hidden;isolation:isolate;border-bottom:1px solid var(--line)}
+.scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;z-index:-2}
+.hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(7,6,6,.9) 0%,rgba(7,6,6,.55) 38%,rgba(7,6,6,0) 58%),linear-gradient(180deg,rgba(7,6,6,.55),transparent 22%,transparent 72%,var(--void))}
+.hero-in{max-width:1280px;margin:0 auto;padding:4.5rem 1.6rem 5.5rem;display:grid;grid-template-columns:minmax(0,560px) 1fr 320px;gap:1.5rem;align-items:center;min-height:min(92vh,840px)}
+.hero-text{grid-column:1}
+.wall{grid-column:3;display:block;max-width:320px;justify-self:end;width:100%;transform:perspective(1400px) rotateY(-5deg)}
+.wall:hover{transform:perspective(1400px) rotateY(0)}
+#name{font-size:0;line-height:0;margin:.5rem 0 1.1rem;text-shadow:none;display:block}
+#name::before,#name::after{display:none}
+.title{width:min(100%,560px);height:auto;display:block}
+.kicker{color:var(--blood-hi)}
+.role-line{display:block;margin-top:.2rem;animation:rtyp 2.6s steps(44) .5s both}
+@keyframes rtyp{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.hud-l,.hud-r{position:absolute;bottom:14px;font-family:var(--hud);font-size:1.05rem;letter-spacing:.2em;color:var(--ash);opacity:.65;pointer-events:none}
+.hud-l{left:24px}.hud-r{right:24px}
+.ticker{display:block;width:100%;height:44px;object-fit:cover;object-position:left;margin-bottom:3rem}
+
+/* section headers */
+.sec-img{display:block;width:100%;height:auto;margin:0 0 1.4rem;position:relative;z-index:1}
+
+/* illustrations */
+.thumbs figure.illus{background:#000}
+.thumbs figure.illus img{aspect-ratio:auto;object-fit:contain}
+.folder .thumbs figure img{aspect-ratio:16/9;object-fit:cover}
+.folder .thumbs figure.illus img{aspect-ratio:600/205}
+.folder.wide{grid-template-columns:minmax(0,380px) minmax(0,1fr)}
+
+/* easter egg + footer */
+.dno{margin-top:.4rem;border-top:1px dashed var(--line);padding-top:.8rem}
+.dno summary{cursor:pointer;font-family:var(--hud);font-size:1.3rem;color:var(--blood-hi);letter-spacing:.12em;list-style:none}
+.dno summary::-webkit-details-marker{display:none}
+.dno summary:hover{color:#ff6a5e}
+.dno p{margin:.7rem 0;color:#bdb5a3}
+.dno b{color:var(--phos);font-weight:400}
+.dno code{font-family:var(--hud);font-size:1.2rem;color:var(--ash)}
+footer{padding:0 0 2rem;border-top:0}
+.foot-img{display:block;width:100%;max-height:230px;object-fit:cover;margin-bottom:.4rem}
+footer p{font-family:var(--hud);font-size:1.1rem;letter-spacing:.2em;color:var(--ash);max-width:none}
+
+@media(max-width:980px){
+  .hero-in{grid-template-columns:1fr;padding:2.5rem 1.2rem 3.5rem;min-height:auto}
+  .hero-text,.wall{grid-column:1}
+  .wall{justify-self:start;max-width:260px;transform:none}
+  .scene{object-position:62% 100%}
+  .hero-shade{background:linear-gradient(180deg,rgba(7,6,6,.75),rgba(7,6,6,.55) 55%,var(--void))}
+}
+@media(max-width:720px){
+  .hud-l,.hud-r{display:none}
+  .folder.wide{grid-template-columns:1fr}
+  .folder.wide .thumbs{max-width:none}
+  .role-line{font-size:1.2rem}
 }

@@ -1,5 +1,19 @@
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rainInit() {
+    const c = document.createElement('canvas'); c.id = 'rain'; c.setAttribute('aria-hidden', 'true'); document.body.prepend(c);
+    const g = c.getContext('2d'); let w, h, drops = [], run = true;
+    const size = () => { w = c.width = innerWidth; h = c.height = innerHeight; const n = Math.min(140, Math.round(w * h / 16000)); drops = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, l: 10 + Math.random() * 18, v: 9 + Math.random() * 9 })); };
+    size(); addEventListener('resize', size);
+    document.addEventListener('visibilitychange', () => { run = !document.hidden; if (run) requestAnimationFrame(f); });
+    function f() {
+      if (!run) return;
+      g.clearRect(0, 0, w, h); g.strokeStyle = 'rgba(216,208,189,.55)'; g.lineWidth = 1; g.beginPath();
+      for (const d of drops) { g.moveTo(d.x, d.y); g.lineTo(d.x - d.l * .18, d.y + d.l); d.y += d.v; d.x -= d.v * .18; if (d.y > h) { d.y = -d.l; d.x = Math.random() * (w + 60); } }
+      g.stroke(); requestAnimationFrame(f);
+    }
+    f();
+  }
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const pad = (n) => String(n).padStart(2, '0');
@@ -103,6 +117,9 @@
     for (let i = 0; i < gi.data.length; i += 4) { const v = Math.random() * 255; gi.data[i] = gi.data[i + 1] = gi.data[i + 2] = v; gi.data[i + 3] = 255; }
     gg.putImageData(gi, 0, 0);
   }, 160);
+
+  /* ---------- rain ---------- */
+  rainInit();
 
   /* ---------- glitch the name, and drop a random feed ---------- */
   const name = $('#name');
