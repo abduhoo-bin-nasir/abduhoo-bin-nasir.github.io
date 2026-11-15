@@ -5,304 +5,371 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Abduhoo Bin Nasir | ARCHIVE #042</title>
 <meta name="description" content="CS undergraduate at IST, Game Dev Lead at DevCore, OOP TA Intern. C++ systems, raycasting engines and P2P multiplayer.">
-<meta name="theme-color" content="#0a0808">
+<meta name="theme-color" content="#070606">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23070606'/%3E%3Ccircle cx='11' cy='15' r='3' fill='%23ff3b30'/%3E%3Ccircle cx='21' cy='15' r='3' fill='%23ff3b30'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip" href="#dossier">Skip to content</a>
 
-<canvas id="grain" aria-hidden="true"></canvas>
+<!-- reusable silhouette -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="fig" viewBox="0 0 160 360">
+    <rect x="56" y="250" width="20" height="104" fill="#030505"/><rect x="84" y="250" width="20" height="104" fill="#030505"/>
+    <path d="M80,94 L50,106 L40,150 L30,264 L66,274 L80,266 L94,274 L130,264 L120,150 L110,106 Z" fill="#040606"/>
+    <path d="M80,96 L68,128 L80,150 L92,128 Z" fill="#0b1210"/>
+    <rect x="48" y="172" width="64" height="5" fill="#0e1513"/>
+    <ellipse cx="80" cy="72" rx="17" ry="21" fill="#030505"/>
+    <ellipse cx="80" cy="53" rx="41" ry="7" fill="#030505"/><path d="M59,53 L61,26 Q80,15 99,26 L101,53 Z" fill="#030505"/>
+    <path d="M110,106 L120,150 L130,264" stroke="#d9a441" stroke-width="1.8" fill="none" opacity=".55"/>
+    <path d="M100,53 L99,26" stroke="#d9a441" stroke-width="1.6" fill="none" opacity=".5"/>
+  </symbol>
+</svg>
+
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 <div class="scan" aria-hidden="true"></div>
+<div class="reticle" id="reticle" aria-hidden="true"><i></i><span id="reticle-t">TRACKING</span></div>
 
 <!-- ============ TOP BAR ============ -->
 <header class="bar" id="top">
-  <a class="brand" href="#top"><span class="rec">REC</span> ABDUHOO.ARCHIVE</a>
-  <nav class="links" aria-label="Sections">
-    <a href="#dossier" data-s="dossier">01 Subject</a>
-    <a href="#equipment" data-s="equipment">02 Arsenal</a>
-    <a href="#case-files" data-s="case-files">03 Cases</a>
-    <a id="nav-evidence" hidden href="#evidence-locker" data-s="evidence-locker">04 Evidence</a>
-    <a href="#service-record" data-s="service-record">05 Service</a>
-    <a href="#make-contact" data-s="make-contact">06 Transmit</a>
+  <a class="brand" href="#hero"><span class="rec">REC</span><b>ABDUHOO</b>.ARCHIVE</a>
+  <nav class="links" aria-label="Chapters">
+    <a href="#dossier" data-s="dossier"><i>01</i> Subject</a>
+    <a href="#cases" data-s="cases"><i>02</i> Cases</a>
+    <a href="#evidence" data-s="evidence"><i>03</i> Evidence</a>
+    <a href="#service" data-s="service"><i>04</i> Service</a>
+    <a href="#contact" data-s="contact"><i>05</i> Transmit</a>
   </nav>
-  <div class="tc" aria-hidden="true"><span id="live-timecode">0000-00-00 00:00:00</span></div>
+  <div class="bar-r">
+    <button class="audio" id="audio" type="button" aria-pressed="false" title="Toggle ambient rain"><span>AUDIO</span> <b id="audio-s">OFF</b></button>
+    <span class="tc" id="tc" aria-hidden="true">REC 00:00:00</span>
+  </div>
+  <div class="tape-bar" aria-hidden="true"><i id="progress"></i></div>
 </header>
 
 <!-- ============ HERO ============ -->
-<section class="hero" aria-labelledby="name">
-  <img class="scene" src="assets/fx/scene.svg" alt="" aria-hidden="true">
+<section class="hero" id="hero" aria-labelledby="name">
+  <div class="world" id="world" aria-hidden="true">
+    <div class="layer sky"><i class="star" style="left:12%;top:10%"></i><i class="star" style="left:34%;top:6%"></i><i class="star" style="left:58%;top:14%"></i><i class="star" style="left:81%;top:8%"></i><i class="star" style="left:92%;top:19%"></i></div>
+    <svg class="layer far" id="far" viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice"></svg>
+    <div class="layer fog f1"></div>
+    <svg class="layer near" id="near" viewBox="0 0 1600 340" preserveAspectRatio="xMidYMax slice"></svg>
+    <div class="ground"></div>
+    <div class="lamp" id="lamp">
+      <div class="cone"></div><div class="halo"></div>
+      <div class="pole"></div><div class="arm"></div><div class="bulb"></div>
+    </div>
+    <div class="pool"></div>
+    <div class="layer fog f2"></div>
+    <div class="watcher" id="watcher">
+      <svg viewBox="0 0 160 360" width="160" height="360">
+        <use href="#fig"/>
+        <g id="eyes"><circle cx="73" cy="72" r="2.3" fill="#ff3b30"/><circle cx="87" cy="72" r="2.3" fill="#ff3b30"/></g>
+        <circle class="ember" cx="93" cy="86" r="1.8" fill="#ff9a3c"/>
+      </svg>
+      <i class="smoke s1"></i><i class="smoke s2"></i><i class="smoke s3"></i>
+    </div>
+  </div>
   <div class="hero-shade" aria-hidden="true"></div>
+
   <div class="hero-in">
     <div class="hero-text">
-      <p class="kicker">SIGNAL RECOVERED // ARCHIVE #042</p>
-      <h1 id="name"><img class="title" src="assets/fx/title.svg" alt="Abduhoo Bin Nasir"></h1>
-      <p class="role-line" id="typed-role">Indie Game Developer <i>//</i> Systems Programmer <i>//</i> CS @ IST</p>
+      <p class="kicker">SIGNAL RECOVERED // ARCHIVE #042 // SEC-LVL 4</p>
+      <h1 id="name" class="name" aria-label="Abduhoo Bin Nasir"><span class="ln" data-text="ABDUHOO" aria-hidden="true">ABDUHOO</span><span class="ln" data-text="BIN NASIR" aria-hidden="true">BIN NASIR</span></h1>
+      <p class="roles" aria-live="off"><span id="role">Indie Game Developer</span><i class="caret"></i></p>
       <p class="lede">Game Dev Lead at DevCore and OOP Teaching Assistant Intern. I build engines from the ground up: C++ raycasters, offline local AI pipelines and P2P multiplayer.</p>
       <div class="cta">
-        <a class="btn solid" href="#case-files">Open the cases</a>
-        <a class="btn" href="#make-contact">Make contact</a>
+        <a class="btn solid" href="#cases" data-t="OPEN">Open the cases</a>
+        <a class="btn" href="#contact" data-t="TRANSMIT">Make contact</a>
       </div>
-      <dl class="facts">
-        <div><dt>Cases on file</dt><dd>6</dd></div>
-        <div><dt>Active roles</dt><dd>2</dd></div>
-        <div><dt>Hackathon</dt><dd>National Finalist</dd></div>
+    </div>
+
+    <figure class="crt" id="crt">
+      <div class="crt-bezel">
+        <div class="crt-screen">
+          <img id="photo" src="assets/profile/abduhoo.jpg" alt="Abduhoo Bin Nasir" width="671" height="1191">
+          <div class="det" aria-hidden="true"><b>SUBJECT 042</b><em>MATCH 99.2%</em></div>
+          <div class="crt-hud" aria-hidden="true"><span class="r">REC</span><span>CAM 01</span></div>
+          <div class="crt-glare" aria-hidden="true"></div>
+        </div>
+      </div>
+      <figcaption><span>CAM 01</span> LIVE // SUBJECT 042</figcaption>
+    </figure>
+  </div>
+
+  <p class="hud hud-l" aria-hidden="true">X <b id="cx">0000</b> Y <b id="cy">0000</b> &nbsp;//&nbsp; FEED UNVERIFIED</p>
+  <p class="hud hud-r" aria-hidden="true">IT IS ALREADY WATCHING YOU BACK</p>
+  <a class="scroll-cue" href="#dossier" aria-label="Scroll to the subject file"><span>SCROLL</span><i></i></a>
+</section>
+
+<div class="marq" aria-hidden="true"><div><span>NO RETURN ADDRESS ▪ 0x5741544348 ▪ ARCHIVE #042 ▪ C++17 ▪ THE FEED IS NOT EMPTY ▪ SIGNAL STRONG ▪ DO NOT LOOK AWAY ▪ </span><span>NO RETURN ADDRESS ▪ 0x5741544348 ▪ ARCHIVE #042 ▪ C++17 ▪ THE FEED IS NOT EMPTY ▪ SIGNAL STRONG ▪ DO NOT LOOK AWAY ▪ </span></div></div>
+
+<main id="main">
+
+<!-- ============ 01 SUBJECT ============ -->
+<section id="dossier" class="ch">
+  <i class="fx" data-fx="splat" data-seed="3" style="top:-60px;right:-40px;width:340px"></i>
+  <header class="ch-h" data-reveal>
+    <span class="ch-n">01</span>
+    <div><p class="ch-tag">FILE // PERSON OF INTEREST</p><h2 data-scramble>THE SUBJECT</h2></div>
+    <p class="ch-r">ACCESS: GRANTED</p><i class="ch-rule"></i>
+  </header>
+
+  <div class="dos-grid">
+    <article class="paper" data-reveal data-tilt>
+      <span class="clip" aria-hidden="true"></span>
+      <i class="fx paper-fx" data-fx="hole" data-seed="8" data-paper="1" style="right:5%;top:4%;width:120px"></i>
+      <div class="paper-head">
+        <h3>Abduhoo Bin Nasir</h3>
+        <p class="typed">Computer Science Undergraduate @ IST | Game Dev Lead @ DevCore | TA Intern (OOP)</p>
+      </div>
+      <div class="paper-body">
+        <p>I'm Abduhoo Bin Nasir, a Computer Science undergraduate at the <button class="redacted" type="button" aria-label="Redacted text, activate to reveal">Institute of Space Technology, Islamabad</button>. I lead game development at DevCore and teach OOP as a Teaching Assistant Intern.</p>
+        <p>I work in C++ systems architecture and low-level software design. I build engines from the ground up, including ASCII and DDA raycasting renderers, offline local LLM pipelines, and P2P multiplayer networking for real-time games. I like clean class hierarchies, explicit data structures, and knowing <button class="redacted" type="button" aria-label="Redacted text, activate to reveal">exactly how everything works under the hood</button>.</p>
+        <ul class="chips">
+          <li class="c-red">STATUS: ACTIVE</li>
+          <li class="c-green">CLEARANCE: LVL 4</li>
+          <li>LOC: ISLAMABAD, PK</li>
+        </ul>
+      </div>
+      <div class="stamp-big" aria-hidden="true">Subject 042<small>OBSERVED // 02:14</small></div>
+    </article>
+
+    <aside class="filecard" data-reveal aria-label="Quick facts">
+      <p class="fc-h">SUBJECT FILE // 042 <span>CLEARANCE LVL 4</span></p>
+      <dl>
+        <div><dt>NAME</dt><dd>Abduhoo Bin Nasir</dd></div>
+        <div><dt>ROLE</dt><dd>Indie game developer</dd></div>
+        <div><dt>STUDYING</dt><dd>BS Computer Science, IST</dd></div>
+        <div><dt>LEADS</dt><dd>Game development at DevCore</dd></div>
+        <div><dt>TEACHES</dt><dd>Object-Oriented Programming (TA)</dd></div>
+        <div><dt>BASE</dt><dd>Islamabad, PK</dd></div>
+        <div><dt>CRAFT</dt><dd>C++ engines, raycasting, offline AI, P2P</dd></div>
+        <div><dt>OBSESSION</dt><dd>Games with a bit of dread</dd></div>
+        <div><dt>LAST SEEN</dt><dd><span class="bar-red" aria-label="redacted"></span> <em>ACTIVE</em></dd></div>
       </dl>
-    </div>
-    <div class="wall" role="group" aria-label="Surveillance monitor">
-      <figure class="feed f-ph">
-        <img id="photo-main" class="zoomable" src="assets/profile/abduhoo.jpg" data-fallback="Abduhoo.jpeg|assets/profile/abduhoo.jpeg" data-keep alt="Abduhoo Bin Nasir">
-        <figcaption><span>CAM 01</span> SUBJECT 042</figcaption>
-      </figure>
-    </div>
+    </aside>
   </div>
-  <p class="hud-l" aria-hidden="true">FEED UNVERIFIED // NO RETURN ADDRESS</p>
-  <p class="hud-r" aria-hidden="true">IT IS ALREADY WATCHING YOU BACK</p>
-</section>
 
-<img class="ticker" src="assets/fx/ticker.svg" alt="" aria-hidden="true">
-
-<main>
-
-<!-- ============ 01 DOSSIER ============ -->
-<section id="dossier" class="sec">
-  <img class="fx splat s1 top-r" src="assets/fx/splatter-1.svg" alt="" aria-hidden="true">
-  <img class="sec-img" src="assets/fx/sec-subject.svg" alt="" aria-hidden="true">
-  <h2 class="sr">Subject Profile</h2>
-
-  <article class="paper dossier">
-    <span class="clip" aria-hidden="true"></span>
-    <img class="fx-paper" src="assets/fx/hole-paper.svg" alt="" aria-hidden="true">
-    <div class="dossier-head">
-      <h3>Abduhoo Bin Nasir</h3>
-      <p class="typed">Computer Science Undergraduate @ IST | Game Dev Lead @ DevCore | TA Intern (OOP)</p>
-    </div>
-    <div class="dossier-body">
-      <p>I'm Abduhoo Bin Nasir, a Computer Science undergraduate at the <button class="redacted" type="button" aria-label="Redacted text, activate to reveal">Institute of Space Technology, Islamabad</button>. I lead game development at DevCore and teach OOP as a Teaching Assistant Intern.</p>
-      <p>I work in C++ systems architecture and low-level software design. I build engines from the ground up, including ASCII and DDA raycasting renderers, offline local LLM pipelines, and P2P multiplayer networking for real-time games. I like clean class hierarchies, explicit data structures, and knowing <button class="redacted" type="button" aria-label="Redacted text, activate to reveal">exactly how everything works under the hood</button>.</p>
-      <ul class="chips">
-        <li class="c-red">STATUS: ACTIVE</li>
-        <li class="c-green">CLEARANCE: LVL 4</li>
-        <li>LOC: ISLAMABAD, PK</li>
-      </ul>
-    </div>
-    <div class="stamp-big" aria-hidden="true">Subject 042<small>OBSERVED // 02:14</small></div>
-  </article>
-</section>
-
-<!-- ============ 02 EQUIPMENT ============ -->
-<section id="equipment" class="sec">
-  <img class="fx hole hd1 top-r" src="assets/fx/hole-dark-1.svg" alt="" aria-hidden="true">
-  <img class="sec-img" src="assets/fx/sec-arsenal.svg" alt="" aria-hidden="true">
-  <h2 class="sr">Equipment &amp; Tech Arsenal</h2>
-  <p class="hint"><b>TRACE:</b> hover, focus or tap any tool. The case files it appears in light up below.</p>
-
-  <div class="gear">
-    <div class="tray">
-      <h3><span>LANGUAGES</span><em>//</em></h3>
-      <ul>
-        <li><button type="button" data-t="cpp">C++</button></li>
-        <li><button type="button" data-t="c">C</button></li>
-        <li><button type="button" data-t="python">Python</button></li>
-        <li><button type="button" data-t="php">PHP</button></li>
-        <li><button type="button" data-t="sql">SQL</button></li>
-        <li><button type="button" data-t="kotlin">Kotlin</button></li>
-      </ul>
-    </div>
-    <div class="tray">
-      <h3><span>SYSTEMS &amp; GAME DEV</span><em>//</em></h3>
-      <ul>
-        <li><button type="button" data-t="godot">Godot 4</button></li>
-        <li><button type="button" data-t="raylib">Raylib</button></li>
-        <li><button type="button" data-t="dda">Raycasting (DDA)</button></li>
-        <li><button type="button" data-t="p2p">P2P Networking</button></li>
-        <li><button type="button" data-t="eos">EOS (Epic Online Services)</button></li>
-        <li><button type="button" data-t="localai">Local AI (whisper.cpp, llama.cpp, Piper)</button></li>
-        <li><button type="button" data-t="qt">Qt</button></li>
-      </ul>
-    </div>
-    <div class="tray">
-      <h3><span>TOOLS &amp; DB</span><em>//</em></h3>
-      <ul>
-        <li><button type="button" data-t="git">Git</button></li>
-        <li><button type="button" data-t="github">GitHub</button></li>
-        <li><button type="button" data-t="mysql">MySQL Workbench</button></li>
-        <li><button type="button" data-t="compose">Jetpack Compose</button></li>
-      </ul>
-    </div>
-  </div>
-  <p class="trace-out" id="trace-out" aria-live="polite">&nbsp;</p>
-</section>
-
-<!-- ============ 03 CASE FILES ============ -->
-<section id="case-files" class="sec">
-  <img class="fx splat s2 top-r" src="assets/fx/splatter-2.svg" alt="" aria-hidden="true">
-  <img class="fx hole hd2 gap-l" src="assets/fx/hole-dark-2.svg" alt="" aria-hidden="true">
-  <img class="sec-img" src="assets/fx/sec-cases.svg" alt="" aria-hidden="true">
-  <h2 class="sr">Case Files (Projects)</h2>
-
-  <!-- #001 featured -->
-  <article class="case feature" data-tools="cpp raylib dda localai">
-    <div class="stamp live">ACTIVE OPERATION</div>
-    <div class="case-media">
-      <figure><img class="zoomable" src="assets/projects/watch-man-1.jpg" alt="WATCH-MAN gameplay: a first-person view down a dim apartment corridor with a ceiling lamp, a window, doors and a figure with a dog in the distance"><figcaption>EXHIBIT 001-A</figcaption></figure>
-    </div>
-    <div class="case-body">
-      <p class="cn">CASE FILE #001</p>
-      <h3>WATCH-MAN</h3>
-      <ul class="tags"><li>C++17</li><li>Raylib</li><li>Raycaster</li><li>llama.cpp</li><li>whisper.cpp</li><li>DSA</li></ul>
-      <p>A bleak, 2030 first-person detective game built from scratch in C++17. Features a custom raycasting engine and a hostile watch AI designed around fully offline voice STT/LLM pipelines. Core mechanics leverage explicit DSA architectures (Graphs, Tries, DAG Topological Sorting, Hash Maps).</p>
-      <div class="status">
-        <div><b class="ok">BUILT</b> pixel raycaster, real stairs, procedural textures, lighting, NPC waypoint loops</div>
-        <div><b class="plan">PLANNED</b> offline voice loop, rogue-watch AI, clue system, pathfinding</div>
-      </div>
-      <div class="case-foot">
-        <span>CASE FILE #001 // ABN</span>
-        <a class="btn solid sm" href="https://github.com/abduhoo-bin-nasir/watch-man" target="_blank" rel="noopener">View Source Code ↗</a>
-      </div>
-    </div>
-  </article>
-
-  <div class="folders">
-
-    <article class="case folder" data-tools="godot p2p eos">
-      <span class="ftab">#002</span>
-      <div class="stamp conf">CONFIDENTIAL</div>
-      <div class="thumbs">
-        <figure><img class="zoomable" src="assets/projects/which-way-good-sir-1.jpg" alt="Which Way Good Sir screenshot 1"><figcaption>EXHIBIT 002-A</figcaption></figure>
-      </div>
-      <p class="cn">CASE FILE #002</p>
-      <h3>Which Way, Good Sir? / Cartographer</h3>
-      <ul class="tags"><li>Godot 4</li><li>Epic Online Services</li><li>P2P</li></ul>
-      <p>A multiplayer dungeon game in Godot 4. Players connect through Epic Online Services P2P networking and explore procedurally generated dungeons together.</p>
-      <div class="case-foot"><span>CASE FILE #002 // EOF</span></div>
-    </article>
-
-    <article class="case folder" data-tools="cpp raylib dda">
-      <span class="ftab">#003</span>
-      <div class="stamp">CLASSIFIED</div>
-      <div class="thumbs two">
-        <figure><img class="zoomable" src="assets/projects/blood-sector-1.jpg" alt="Blood Sector screenshot 1"><figcaption>EXHIBIT 003-A</figcaption></figure>
-        <figure><img class="zoomable" src="assets/projects/blood-sector-2.jpg" alt="Blood Sector screenshot 2"><figcaption>EXHIBIT 003-B</figcaption></figure>
-      </div>
-      <p class="cn">CASE FILE #003</p>
-      <h3>Blood Sector</h3>
-      <ul class="tags"><li>C++</li><li>Raylib</li><li>DDA Raycasting</li></ul>
-      <p>A Doom-style raycasting engine and FPS in C++. Custom DDA wall rendering, a clean OOP class hierarchy, four levels, and three enemy types (Walker, Stalker, Boss).</p>
-      <div class="case-foot"><span>CASE FILE #003 // EOF</span><a class="btn sm" href="https://github.com/abduhoo-bin-nasir/Blood-Sector" target="_blank" rel="noopener">View Source Code ↗</a></div>
-    </article>
-
-    <article class="case folder" data-tools="python">
-      <span class="ftab">#004</span>
-      <div class="stamp restr">NATIONAL FINALIST</div>
-      <div class="thumbs"><figure class="illus"><img class="zoomable" src="assets/fx/art-ustad.svg" alt="Illustration of a voice waveform turning into a transcript"><figcaption>ILLUSTRATION</figcaption></figure></div>
-      <p class="cn">CASE FILE #004</p>
-      <h3>Ustad-e-Karigar</h3>
-      <ul class="tags"><li>Python</li><li>Speech-to-Text</li><li>LLM</li></ul>
-      <p>An AI assistant built on Python speech-to-text and LLM backends. National Finalist at the Alibaba Cloud AI Hackathon, FAST-NUCES Islamabad.</p>
-      <div class="case-foot"><span>CASE FILE #004 // EOF</span></div>
-    </article>
-
-    <article class="case folder" data-tools="kotlin compose">
-      <span class="ftab">#005</span>
-      <div class="stamp done">ON FILE</div>
-      <div class="thumbs"><figure class="illus"><img class="zoomable" src="assets/fx/art-speedreader.svg" alt="Illustration of words flashing one at a time on a focal point"><figcaption>ILLUSTRATION</figcaption></figure></div>
-      <p class="cn">CASE FILE #005</p>
-      <h3>RSVP Speed Reader</h3>
-      <ul class="tags"><li>Kotlin</li><li>Jetpack Compose</li><li>Android</li></ul>
-      <p>A Kotlin and Jetpack Compose Android app that shows PDFs and EPUBs one word at a time, flashing each word on a fixed focal point.</p>
-      <div class="case-foot"><span>CASE FILE #005 // EOF</span></div>
-    </article>
-
-    <article class="case folder wide" data-tools="php sql mysql">
-      <span class="ftab">#006</span>
-      <div class="stamp done">DECRYPTED</div>
-      <div class="thumbs"><figure class="illus"><img class="zoomable" src="assets/fx/art-takeaway.svg" alt="Illustration of a printing receipt and order status line"><figcaption>ILLUSTRATION</figcaption></figure></div>
-      <div>
-        <p class="cn">CASE FILE #006</p>
-        <h3>Takeaway</h3>
-        <ul class="tags"><li>PHP</li><li>MySQL</li><li>Relational DB</li></ul>
-        <p>A food ordering web app on a relational PHP/MySQL backend. Transaction-safe order flow, an admin panel, and views and joins across the schema.</p>
-        <div class="case-foot"><span>CASE FILE #006 // EOF</span></div>
-      </div>
-    </article>
-
+  <div class="stats" data-reveal>
+    <div><b data-count="6">6</b><span>CASES ON FILE</span></div>
+    <div><b data-count="8">8</b><span>LANGUAGES</span></div>
+    <div><b data-count="1">1</b><span>NATIONAL FINALIST</span></div>
+    <div><b>B2</b><span>GERMAN, IN PROGRESS</span></div>
   </div>
 </section>
 
-<!-- ============ 03.5 EVIDENCE (hidden until an image loads) ============ -->
-<section id="evidence-locker" class="sec" hidden>
-  <img class="sec-img" src="assets/fx/sec-evidence.svg" alt="" aria-hidden="true">
-  <h2 class="sr">Evidence Locker</h2>
-  <p class="hint">Recovered documents and field photographs. Tap an item to inspect.</p>
-  <div class="evidence">
-    <figure class="polaroid" data-slot>
-      <img class="zoomable" src="assets/certs/cert-alibaba-regional.jpg" alt="Regional Finalist certificate, Alibaba Cloud AI Hackathon Pakistan 2026">
-      <figcaption><b>EXHIBIT E-01</b>Regional Finalist. Alibaba Cloud AI Hackathon Pakistan 2026, Islamabad Regional Technical Evaluation.</figcaption>
+<!-- ============ 02 CASES ============ -->
+<section id="cases" class="ch">
+  <i class="fx" data-fx="hole" data-seed="5" style="top:-30px;left:-30px;width:150px"></i>
+  <header class="ch-h" data-reveal>
+    <span class="ch-n">02</span>
+    <div><p class="ch-tag">FILE // SIX ON RECORD</p><h2 data-scramble>THE CASES</h2></div>
+    <p class="ch-r">CLASSIFICATION: MIXED</p><i class="ch-rule"></i>
+  </header>
+
+  <div class="rack" data-reveal>
+    <p class="rack-h"><b>TRACE</b> hover or tap a tool. The strings light up to every case that used it.</p>
+    <div class="rack-g">
+      <div class="tray"><h3>LANGUAGES</h3><ul>
+        <li><button type="button" data-t="cpp">C++</button></li><li><button type="button" data-t="c">C</button></li><li><button type="button" data-t="python">Python</button></li><li><button type="button" data-t="kotlin">Kotlin</button></li><li><button type="button" data-t="gdscript">GDScript</button></li><li><button type="button" data-t="php">PHP</button></li><li><button type="button" data-t="js">JavaScript</button></li><li><button type="button" data-t="sql">SQL</button></li>
+      </ul></div>
+      <div class="tray"><h3>SYSTEMS &amp; GAME DEV</h3><ul>
+        <li><button type="button" data-t="godot">Godot 4</button></li><li><button type="button" data-t="raylib">Raylib</button></li><li><button type="button" data-t="dda">Raycasting (DDA)</button></li><li><button type="button" data-t="p2p">P2P Networking</button></li><li><button type="button" data-t="eos">EOS</button></li><li><button type="button" data-t="localai">Local AI (whisper.cpp, llama.cpp, Piper)</button></li><li><button type="button" data-t="qt">Qt</button></li>
+      </ul></div>
+      <div class="tray"><h3>TOOLS &amp; DB</h3><ul>
+        <li><button type="button" data-t="git">Git</button></li><li><button type="button" data-t="github">GitHub</button></li><li><button type="button" data-t="mysql">MySQL Workbench</button></li><li><button type="button" data-t="compose">Jetpack Compose</button></li>
+      </ul></div>
+    </div>
+    <p class="trace-out" id="trace-out" aria-live="polite">&nbsp;</p>
+  </div>
+
+  <div class="board-wrap" data-reveal>
+    <div class="board" id="board">
+      <svg class="strings" id="strings" aria-hidden="true"></svg>
+      <div class="spot" aria-hidden="true"></div>
+
+      <div class="note n1" aria-hidden="true"><b>HOW TO READ THIS BOARD</b>Drag the files. Follow the string. Click a file to open it.</div>
+      <div class="note n2" aria-hidden="true"><b>KEY</b><i class="k1"></i> subject link<br><i class="k2"></i> shared tech</div>
+
+      <div class="subj" id="subj" aria-hidden="true">
+        <span class="pin"></span>
+        <svg viewBox="0 0 160 360" width="90" height="200"><use href="#fig"/><g class="eyes2"><circle cx="73" cy="72" r="2.6" fill="#ff3b30"/><circle cx="87" cy="72" r="2.6" fill="#ff3b30"/></g></svg>
+        <b>SUBJECT 042</b><em>FACE NOT ON RECORD</em>
+      </div>
+
+      <article class="case" id="c1" data-n="001" data-x="3" data-y="3" data-r="-2" data-tools="cpp raylib dda localai" tabindex="0" role="button" aria-label="Open case file 001: WATCH-MAN">
+        <span class="pin"></span>
+        <div class="shot"><img src="assets/projects/watch-man-1.jpg" alt="WATCH-MAN gameplay: a first-person view down a dim apartment corridor with a ceiling lamp, doors and a figure with a dog in the distance" loading="lazy"><i class="exh">EXHIBIT 001-A</i></div>
+        <div class="cap"><p class="cn">CASE FILE #001</p><h3>WATCH-MAN</h3><ul class="tags"><li>C++17</li><li>Raylib</li><li>Raycaster</li><li>DSA</li></ul></div>
+        <div class="stamp live">ACTIVE OP</div>
+        <div class="more" hidden>
+          <p class="d">A bleak, 2030 first-person detective game built from scratch in C++17. Features a custom raycasting engine and a hostile watch AI designed around fully offline voice STT/LLM pipelines. Core mechanics leverage explicit DSA architectures (Graphs, Tries, DAG Topological Sorting, Hash Maps).</p>
+          <div class="status"><div><b class="ok">BUILT</b> pixel raycaster, real stairs, procedural textures, lighting, NPC waypoint loops</div><div><b class="plan">PLANNED</b> offline voice loop, rogue-watch AI, clue system, pathfinding</div></div>
+          <p class="meta-tags"><span>C++17</span><span>Raylib</span><span>Raycaster</span><span>llama.cpp</span><span>whisper.cpp</span><span>DSA</span></p>
+          <a class="btn solid" href="https://github.com/abduhoo-bin-nasir/watch-man" target="_blank" rel="noopener">View Source Code ↗</a>
+        </div>
+      </article>
+
+      <article class="case" id="c2" data-n="002" data-x="70" data-y="2" data-r="2" data-tools="godot gdscript p2p eos" tabindex="0" role="button" aria-label="Open case file 002: Which Way, Good Sir?">
+        <span class="pin"></span>
+        <div class="shot"><img src="assets/projects/which-way-good-sir-1.jpg" alt="Which Way, Good Sir? screenshot: a top-down dungeon room with players and a lobby panel" loading="lazy"><i class="exh">EXHIBIT 002-A</i></div>
+        <div class="cap"><p class="cn">CASE FILE #002</p><h3>Which Way, Good Sir? / Cartographer</h3><ul class="tags"><li>Godot 4</li><li>EOS</li><li>P2P</li></ul></div>
+        <div class="stamp conf">CONFIDENTIAL</div>
+        <div class="more" hidden>
+          <p class="d">A multiplayer dungeon game in Godot 4. Players connect through Epic Online Services P2P networking and explore procedurally generated dungeons together. A 5 to 15 player social-deduction dungeon escape.</p>
+          <p class="meta-tags"><span>Godot 4</span><span>Epic Online Services</span><span>P2P</span></p>
+        </div>
+      </article>
+
+      <article class="case" id="c3" data-n="003" data-x="2" data-y="35" data-r="1.5" data-tools="cpp raylib dda" tabindex="0" role="button" aria-label="Open case file 003: Blood Sector">
+        <span class="pin"></span>
+        <div class="shot"><img src="assets/projects/blood-sector-1.jpg" alt="Blood Sector screenshot: a red-skinned enemy in a dark corridor, pistol in hand" loading="lazy"><i class="exh">EXHIBIT 003-A</i></div>
+        <div class="cap"><p class="cn">CASE FILE #003</p><h3>Blood Sector</h3><ul class="tags"><li>C++</li><li>Raylib</li><li>DDA</li></ul></div>
+        <div class="stamp">CLASSIFIED</div>
+        <div class="more" hidden>
+          <p class="d">A Doom-style raycasting engine and FPS in C++. Custom DDA wall rendering, a clean OOP class hierarchy, four levels, and three enemy types (Walker, Stalker, Boss).</p>
+          <p class="meta-tags"><span>C++</span><span>Raylib</span><span>DDA Raycasting</span></p>
+          <div class="exhs"><img src="assets/projects/blood-sector-1.jpg" alt="Blood Sector screenshot 1" loading="lazy"><img src="assets/projects/blood-sector-2.jpg" alt="Blood Sector screenshot 2" loading="lazy"></div>
+          <a class="btn solid" href="https://github.com/abduhoo-bin-nasir/Blood-Sector" target="_blank" rel="noopener">View Source Code ↗</a>
+        </div>
+      </article>
+
+      <article class="case" id="c4" data-n="004" data-x="71" data-y="36" data-r="-1.5" data-tools="python" tabindex="0" role="button" aria-label="Open case file 004: Ustad-e-Karigar">
+        <span class="pin"></span>
+        <div class="shot mini mini-wave"><canvas width="300" height="110"></canvas><div class="tx"></div><i class="exh">SIMULATION</i></div>
+        <div class="cap"><p class="cn">CASE FILE #004</p><h3>Ustad-e-Karigar</h3><ul class="tags"><li>Python</li><li>STT</li><li>LLM</li></ul></div>
+        <div class="stamp fin">NATIONAL FINALIST</div>
+        <div class="more" hidden>
+          <p class="d">An AI assistant built on Python speech-to-text and LLM backends. National Finalist at the Alibaba Cloud AI Hackathon, FAST-NUCES Islamabad.</p>
+          <p class="meta-tags"><span>Python</span><span>Speech-to-Text</span><span>LLM</span></p>
+          <div class="exhs"><img src="assets/certs/cert-alibaba-national.jpg" alt="Certificate of Participation, National Final, Alibaba Cloud AI Hackathon Pakistan 2026" loading="lazy"></div>
+        </div>
+      </article>
+
+      <article class="case" id="c5" data-n="005" data-x="14" data-y="67" data-r="-1" data-tools="kotlin compose" tabindex="0" role="button" aria-label="Open case file 005: RSVP Speed Reader">
+        <span class="pin"></span>
+        <div class="shot mini mini-rsvp"><div class="rs"><span id="rs-w"></span></div><i class="exh">SIMULATION</i></div>
+        <div class="cap"><p class="cn">CASE FILE #005</p><h3>RSVP Speed Reader</h3><ul class="tags"><li>Kotlin</li><li>Compose</li><li>Android</li></ul></div>
+        <div class="stamp done">ON FILE</div>
+        <div class="more" hidden>
+          <p class="d">A Kotlin and Jetpack Compose Android app that shows PDFs and EPUBs one word at a time, flashing each word on a fixed focal point.</p>
+          <p class="meta-tags"><span>Kotlin</span><span>Jetpack Compose</span><span>Android</span></p>
+        </div>
+      </article>
+
+      <article class="case" id="c6" data-n="006" data-x="59" data-y="68" data-r="1.2" data-tools="php sql mysql" tabindex="0" role="button" aria-label="Open case file 006: Takeaway">
+        <span class="pin"></span>
+        <div class="shot mini mini-sql"><pre id="sql-o"></pre><div class="pp"><i></i><i></i><i></i></div><i class="exh">SIMULATION</i></div>
+        <div class="cap"><p class="cn">CASE FILE #006</p><h3>Takeaway</h3><ul class="tags"><li>PHP</li><li>MySQL</li><li>SQL</li></ul></div>
+        <div class="stamp done">DECRYPTED</div>
+        <div class="more" hidden>
+          <p class="d">A food ordering web app on a relational PHP/MySQL backend. Transaction-safe order flow, an admin panel, and views and joins across the schema.</p>
+          <p class="meta-tags"><span>PHP</span><span>MySQL</span><span>Relational DB</span></p>
+        </div>
+      </article>
+    </div>
+    <p class="board-foot">Simulation tiles are illustrations drawn for this page, not captures from the projects.</p>
+  </div>
+</section>
+
+<!-- ============ 03 EVIDENCE ============ -->
+<section id="evidence" class="ch">
+  <i class="fx" data-fx="splat" data-seed="9" style="top:-70px;right:-40px;width:300px"></i>
+  <header class="ch-h" data-reveal>
+    <span class="ch-n">03</span>
+    <div><p class="ch-tag">FILE // RECOVERED DOCUMENTS</p><h2 data-scramble>EVIDENCE</h2></div>
+    <p class="ch-r">CHAIN OF CUSTODY: INTACT</p><i class="ch-rule"></i>
+  </header>
+  <div class="evi">
+    <figure class="polaroid" data-reveal data-tilt>
+      <img class="zoom" src="assets/certs/cert-alibaba-national.jpg" alt="Certificate of Participation, National Final, Alibaba Cloud AI Hackathon Pakistan 2026" loading="lazy">
+      <figcaption><b>EXHIBIT E-01</b>Certificate of Participation, National Final. Alibaba Cloud AI Hackathon Pakistan 2026.</figcaption>
     </figure>
-    <figure class="polaroid" data-slot>
-      <img class="zoomable" src="assets/certs/cert-alibaba-national.jpg" alt="National Final certificate of participation, Alibaba Cloud AI Hackathon Pakistan 2026">
-      <figcaption><b>EXHIBIT E-02</b>Certificate of Participation, National Final. Alibaba Cloud AI Hackathon Pakistan 2026.</figcaption>
-    </figure>
-    <figure class="polaroid" data-slot>
-      <img class="zoomable" src="assets/certs/hackathon-team.jpg" alt="Team Ustad-e-Karigar at the hackathon">
-      <figcaption><b>EXHIBIT E-03</b>Team Ustad-e-Karigar, field photograph.</figcaption>
-    </figure>
-    <figure class="polaroid tall" data-slot>
-      <img class="zoomable" src="assets/certs/cert-vultr-agent-rush.jpg" alt="Certificate of Completion, Vultr: Agent Rush Hackathon, awarded to @abduhoo_bin_nasir842, Nov 3 to 8, 2026">
-      <figcaption><b>EXHIBIT E-04</b>Certificate of Completion. Vultr: Agent Rush Hackathon (LabLab.ai), Nov 3 to 8, 2026.</figcaption>
+    <figure class="polaroid tall" data-reveal data-tilt>
+      <img class="zoom" src="assets/certs/cert-vultr-agent-rush.jpg" alt="Certificate of Completion, Vultr: Agent Rush Hackathon, awarded to @abduhoo_bin_nasir842, Nov 3 to 8, 2026" loading="lazy">
+      <figcaption><b>EXHIBIT E-02</b>Certificate of Completion. Vultr: Agent Rush Hackathon (LabLab.ai), Nov 3 to 8, 2026.</figcaption>
     </figure>
   </div>
 </section>
 
-<!-- ============ 04 SERVICE RECORD ============ -->
-<section id="service-record" class="sec">
-  <img class="fx splat s3 mid-r" src="assets/fx/splatter-3.svg" alt="" aria-hidden="true">
-  <img class="sec-img" src="assets/fx/sec-service.svg" alt="" aria-hidden="true">
-  <h2 class="sr">Service Record &amp; Leadership</h2>
-  <ol class="logs">
-    <li class="log">
+<!-- ============ 04 SERVICE ============ -->
+<section id="service" class="ch">
+  <i class="fx" data-fx="splat" data-seed="12" style="top:40%;right:-60px;width:320px"></i>
+  <header class="ch-h" data-reveal>
+    <span class="ch-n">04</span>
+    <div><p class="ch-tag">FILE // LOGS</p><h2 data-scramble>SERVICE RECORD</h2></div>
+    <p class="ch-r">STATUS: ACTIVE</p><i class="ch-rule"></i>
+  </header>
+  <ol class="logs" id="logs">
+    <li class="log" data-reveal>
       <span class="log-id">LOG #8821</span>
       <p class="log-role">GAME DEVELOPMENT LEAD</p>
-      <h3><img data-slot src="assets/logos/logo-devcore.png" alt="">DevCore Student Organization, IST</h3>
+      <h3><img src="assets/logos/logo-devcore.png" alt="" width="64" height="36">DevCore Student Organization, IST</h3>
       <p>Directing game development initiatives, organizing workshops, and mentoring student developers in engine architecture and gameplay mechanics.</p>
     </li>
-    <li class="log">
+    <li class="log" data-reveal>
       <span class="log-id">LOG #8822</span>
       <p class="log-role">TEACHING ASSISTANT INTERN (OOP &amp; OOP LAB)</p>
-      <h3><img data-slot src="assets/logos/logo-ist.png" alt="">Institute of Space Technology</h3>
+      <h3><img src="assets/logos/logo-ist.png" alt="" width="40" height="40">Institute of Space Technology</h3>
       <p>Assisted faculty in conducting Object-Oriented Programming labs, evaluating code submissions, and guiding undergraduates on memory management and class design.</p>
     </li>
   </ol>
 </section>
 
-<!-- ============ 05 CONTACT ============ -->
-<section id="make-contact" class="sec">
-  <img class="fx hole hd1 mid-r" src="assets/fx/hole-dark-1.svg" alt="" aria-hidden="true">
-  <img class="sec-img" src="assets/fx/sec-transmit.svg" alt="" aria-hidden="true">
-  <h2 class="sr">Make Contact</h2>
-  <div class="term">
-    <div class="term-bar"><i></i><i></i><i></i><span>secure-channel // abduhoo</span></div>
-    <div class="term-body">
-      <p>Open for archival inquiries, research collaborations, systems engineering discussions, or secure communications.</p>
-      <a class="line" href="mailto:abduhoobinnasir@gmail.com"><b>✉</b><span>abduhoobinnasir@gmail.com</span><em>→</em></a>
-      <a class="line" href="https://www.linkedin.com/in/abduhoo-bin-nasir-1643693a0/" target="_blank" rel="noopener"><b>in</b><span>LinkedIn Profile</span><em>→</em></a>
-      <a class="line" href="https://github.com/abduhoo-bin-nasir" target="_blank" rel="noopener"><b>&lt;/&gt;</b><span>GitHub</span><em>→</em></a>
-      <p class="prompt">&gt; awaiting transmission<span class="cursor"></span></p>
-      <details class="dno"><summary>▓▓▓ DO NOT OPEN ▓▓▓</summary><p>You opened it. Good. If you got this far, you are the kind of person I want to hear from: collaborations, game jams, systems nerds, anyone who has ever wondered how the wall got drawn. Write to <b>abduhoobinnasir@gmail.com</b>.</p><code>0x5741544348</code></details>
-    </div>
+<!-- ============ 05 TRANSMIT ============ -->
+<section id="contact" class="ch">
+  <i class="fx" data-fx="hole" data-seed="11" style="top:30%;right:2%;width:150px"></i>
+  <header class="ch-h" data-reveal>
+    <span class="ch-n">05</span>
+    <div><p class="ch-tag">FILE // OPEN CHANNELS</p><h2 data-scramble>TRANSMIT</h2></div>
+    <p class="ch-r">LISTENING</p><i class="ch-rule"></i>
+  </header>
+  <p class="lead" data-reveal>Open for archival inquiries, research collaborations, systems engineering discussions, or secure communications.</p>
+
+  <div class="term" id="term" data-reveal>
+    <div class="term-bar"><i></i><i></i><i></i><span>secure-channel // abduhoo</span><em>type <code>help</code></em></div>
+    <div class="term-out" id="t-out" role="log" aria-live="polite"></div>
+    <form class="term-in" id="t-form" autocomplete="off"><label for="t-input">&gt;</label><input id="t-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Terminal command"><span class="blk"></span></form>
+    <div class="quick" id="quick" aria-label="Quick commands"><button type="button" data-c="help">help</button><button type="button" data-c="cases">cases</button><button type="button" data-c="contact">contact</button><button type="button" data-c="watch">watch</button></div>
+  </div>
+
+  <div class="lines" data-reveal>
+    <a class="line" href="mailto:abduhoobinnasir@gmail.com" data-t="EMAIL"><b>✉</b><span>abduhoobinnasir@gmail.com</span><em>→</em></a>
+    <a class="line" href="https://www.linkedin.com/in/abduhoo-bin-nasir-1643693a0/" target="_blank" rel="noopener" data-t="LINKEDIN"><b>in</b><span>LinkedIn</span><em>→</em></a>
+    <a class="line" href="https://github.com/abduhoo-bin-nasir" target="_blank" rel="noopener" data-t="GITHUB"><b>&lt;/&gt;</b><span>GitHub</span><em>→</em></a>
   </div>
 </section>
 
 </main>
 
-<footer>
-  <img class="foot-img" src="assets/fx/footer.svg" alt="" aria-hidden="true">
-  <p>© 2026 Abduhoo Bin Nasir. End of recording.</p>
+<footer class="foot">
+  <svg class="ecg" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 H420 L440,40 L452,26 L464,56 L478,6 L492,70 L504,40 H1200" pathLength="1"/></svg>
+  <p class="ft1">THE ARCHIVE REMAINS OPEN</p>
+  <p class="ft2">© 2026 Abduhoo Bin Nasir. End of recording.</p>
+  <i class="feyes" aria-hidden="true"></i>
 </footer>
 
-<div id="lightbox" hidden role="dialog" aria-label="Image viewer"><img alt=""><div class="lb-hint">[ TAP TO CLOSE ]</div></div>
+<!-- case file modal -->
+<div class="file" id="file" role="dialog" aria-modal="true" aria-labelledby="file-t" hidden>
+  <div class="file-back" data-close></div>
+  <article class="file-paper">
+    <button class="file-x" type="button" data-close aria-label="Close case file">✕</button>
+    <div class="file-shot" id="file-shot"></div>
+    <div class="file-body">
+      <p class="cn" id="file-n"></p>
+      <h2 id="file-t"></h2>
+      <div id="file-c"></div>
+    </div>
+    <div class="stamp-big small" id="file-s" aria-hidden="true"></div>
+  </article>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-label="Image viewer"><img alt=""><span>[ CLICK TO CLOSE ]</span></div>
 
 <script src="script.js"></script>
 </body>
