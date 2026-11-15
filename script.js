@@ -55,25 +55,34 @@
       x += w + (r() * 6);
     }
     svg.innerHTML = out;
-    $$('.w', svg).forEach((e) => wins.push(e));
+    const all = $$('.w', svg), live = $('#' + svg.id + 'f');
+    for (let i = 0; i < 14 && all.length; i++) { const w = all.splice((r() * all.length) | 0, 1)[0]; live.appendChild(w); wins.push(w); }
   }
   skyline($('#far'), 1600, 420, '#0a1316', 110, 330, 34, 90, 7, .1, '#e6c27a');
   skyline($('#near'), 1600, 340, '#040606', 70, 250, 50, 120, 21, .06, '#d9a441');
   if (!reduce) setInterval(() => {
-    if (document.hidden || !wins.length) return;
-    for (let i = 0; i < 4; i++) { const w = wins[(Math.random() * wins.length) | 0]; w.setAttribute('opacity', Math.random() > .5 ? (.2 + Math.random() * .6).toFixed(2) : '0.03'); }
-  }, 450);
+    if (document.hidden || heroOff || !wins.length) return;
+    for (let i = 0; i < 2; i++) { const w = wins[(Math.random() * wins.length) | 0]; w.setAttribute('opacity', Math.random() > .5 ? (.2 + Math.random() * .6).toFixed(2) : '0.03'); }
+  }, 900);
 
   /* ---------- hero: parallax / eyes / hud ---------- */
   const world = $('#world'), eyes = $('#eyes'), watcher = $('#watcher'), cx = $('#cx'), cy = $('#cy');
+  const L = { sky: $('.sky'), far: $('.far'), near: $('.near'), farf: $('#farf'), nearf: $('#nearf'), lamp: $('#lamp'), pool: $('.pool') };
+  const P = [[L.sky, -3, .02], [L.far, -8, .06], [L.farf, -8, .06], [L.near, -18, .12], [L.nearf, -18, .12], [L.lamp, -26, 0], [L.pool, -26, 0], [watcher, -30, 0]];
+  let pxv = 0, syv = 0, pend = false, wr = null;
+  const rect = () => { wr = watcher.getBoundingClientRect(); };
+  function applyPar() { pend = false; for (const [el, k, sk] of P) el.style.transform = `translate3d(${(pxv * k).toFixed(1)}px,${(syv * sk).toFixed(1)}px,0)`; }
+  const queuePar = () => { if (!pend) { pend = true; requestAnimationFrame(applyPar); } };
+  let heroOff = false;
+  new IntersectionObserver((es) => { heroOff = !es[0].isIntersecting; $('#hero').classList.toggle('off', heroOff); }, { threshold: 0 }).observe($('#hero'));
   let mx = innerWidth / 2, my = innerHeight / 2, mTick = false;
   addEventListener('pointermove', (e) => {
     mx = e.clientX; my = e.clientY;
     if (!mTick) { mTick = true; requestAnimationFrame(() => {
       mTick = false;
       if (scrollY < innerHeight * 1.2) {
-        world.style.setProperty('--px', ((mx / innerWidth - .5) * 2).toFixed(3));
-        const r = watcher.getBoundingClientRect();
+        pxv = (mx / innerWidth - .5) * 2; queuePar();
+        const r = wr || (rect(), wr);
         const dx = mx - (r.left + r.width * .5), dy = my - (r.top + r.height * .2);
         const d = Math.hypot(dx, dy) || 1;
         eyes.style.transform = `translate(${(dx / d * 1.8).toFixed(2)}px,${(dy / d * 1.2).toFixed(2)}px)`;
@@ -89,7 +98,7 @@
     sTick = false;
     const y = scrollY, max = doc.scrollHeight - innerHeight;
     prog.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
-    if (y < innerHeight * 1.2) world.style.setProperty('--sy', y);
+    if (y < innerHeight * 1.2) { syv = y; queuePar(); }
     if (logs) {
       const r = logs.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, (innerHeight * .6 - r.top) / r.height));
@@ -97,7 +106,7 @@
     }
   }
   addEventListener('scroll', () => { if (!sTick) { sTick = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  addEventListener('resize', onScroll);
+  addEventListener('resize', () => { wr = null; onScroll(); });
   onScroll();
   const t0 = Date.now();
   setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); tcEl.textContent = `REC ${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`; }, 1000);
@@ -108,7 +117,7 @@
 
   /* ---------- name decode / glitch / roles ---------- */
   const nameEl = $('#name'), lns = $$('.ln', nameEl);
-  lns.forEach((l, i) => { const t = l.dataset.text; setTimeout(() => scramble(l, t, 900, (s) => l.setAttribute('data-text', s)), 250 + i * 350); });
+  lns.forEach((l, i) => { const t = l.dataset.text; setTimeout(() => scramble(l, t, 900), 250 + i * 350); });
   if (!reduce) (function gl() { setTimeout(() => { nameEl.classList.add('gl'); setTimeout(() => nameEl.classList.remove('gl'), 320); gl(); }, rnd(6000, 13000)); })();
   const roles = ['Indie Game Developer', 'C++ Systems Programmer', 'Game Dev Lead @ DevCore', 'OOP Teaching Assistant', 'Raycasting Engine Builder'];
   const roleEl = $('#role');
@@ -178,22 +187,21 @@
     const rt = $('#reticle'), rl = $('#reticle-t'); let lock = null;
     addEventListener('pointermove', (e) => {
       rt.classList.add('on');
-      if (!lock) { rt.style.left = e.clientX + 'px'; rt.style.top = e.clientY + 'px'; }
+      if (!lock) rt.style.transform = `translate(${e.clientX - 17}px,${e.clientY - 17}px)`;
     }, { passive: true });
     document.addEventListener('mouseleave', () => rt.classList.remove('on'));
     document.addEventListener('pointerover', (e) => {
       const t = e.target.closest && e.target.closest('a,button,.case,.zoom,input');
-      if (!t || t.closest('.file-paper') && false) { if (lock) { lock = null; rt.classList.remove('lock'); rt.style.width = rt.style.height = ''; rt.style.margin = ''; } return; }
+      if (!t || t.closest('.file-paper') && false) { if (lock) { lock = null; rt.classList.remove('lock'); rt.style.width = rt.style.height = ''; } return; }
       const b = t.getBoundingClientRect();
       if (b.width > 380 || b.height > 320) return;
       lock = t; rt.classList.add('lock');
-      rt.style.left = (b.left + b.width / 2) + 'px'; rt.style.top = (b.top + b.height / 2) + 'px';
+      rt.style.transform = `translate(${b.left - 5}px,${b.top - 5}px)`;
       rt.style.width = (b.width + 10) + 'px'; rt.style.height = (b.height + 10) + 'px';
-      rt.style.margin = `-${(b.height + 10) / 2}px 0 0 -${(b.width + 10) / 2}px`;
       rl.textContent = t.matches('.tray button') ? 'TRACE' : t.matches('.case') ? 'OPEN FILE' : t.matches('.zoom') ? 'ENLARGE' : (t.dataset.t || 'TARGET');
     });
     document.addEventListener('pointerout', (e) => {
-      if (lock && !(e.relatedTarget && lock.contains(e.relatedTarget))) { lock = null; rt.classList.remove('lock'); rt.style.width = rt.style.height = ''; rt.style.margin = ''; }
+      if (lock && !(e.relatedTarget && lock.contains(e.relatedTarget))) { lock = null; rt.classList.remove('lock'); rt.style.width = rt.style.height = ''; }
     });
   }
 
@@ -256,7 +264,8 @@
     c.addEventListener('click', () => { if (!justDragged) openFile(c); });
     c.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFile(c); } });
   });
-  board.addEventListener('pointermove', (e) => { const r = board.getBoundingClientRect(); board.style.setProperty('--mx', (e.clientX - r.left) + 'px'); board.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+  let bq = null, bt = false;
+  board.addEventListener('pointermove', (e) => { bq = e; if (!bt) { bt = true; requestAnimationFrame(() => { bt = false; const r = board.getBoundingClientRect(); board.style.setProperty('--mx', (bq.clientX - r.left) + 'px'); board.style.setProperty('--my', (bq.clientY - r.top) + 'px'); }); } });
   addEventListener('resize', place);
   addEventListener('load', place);
   place();
@@ -425,15 +434,18 @@
   /* ---------- rain ---------- */
   if (!reduce) {
     const c = $('#rain'), g = c.getContext('2d'); let w, h, drops = [], run = true;
-    const size = () => { w = c.width = innerWidth; h = c.height = innerHeight; const n = Math.min(140, Math.round(w * h / 15000)); drops = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, l: 10 + Math.random() * 16, v: 9 + Math.random() * 9 })); };
+    const size = () => { w = c.width = innerWidth; h = c.height = innerHeight; const n = Math.min(80, Math.round(w * h / 22000)); drops = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, l: 10 + Math.random() * 16, v: 9 + Math.random() * 9 })); };
     size(); addEventListener('resize', size);
     document.addEventListener('visibilitychange', () => { run = !document.hidden; if (run) requestAnimationFrame(f); });
-    function f() {
+    let last = 0;
+    function f(t) {
       if (!run) return;
+      if (t - last < 33) { requestAnimationFrame(f); return; }
+      last = t;
       g.clearRect(0, 0, w, h); g.strokeStyle = 'rgba(216,208,189,.5)'; g.lineWidth = 1; g.beginPath();
-      for (const d of drops) { g.moveTo(d.x, d.y); g.lineTo(d.x - d.l * .18, d.y + d.l); d.y += d.v; d.x -= d.v * .18; if (d.y > h) { d.y = -d.l; d.x = Math.random() * (w + 60); } }
+      for (const d of drops) { g.moveTo(d.x, d.y); g.lineTo(d.x - d.l * .18, d.y + d.l); d.y += d.v * 1.6; d.x -= d.v * .29; if (d.y > h) { d.y = -d.l; d.x = Math.random() * (w + 60); } }
       g.stroke(); requestAnimationFrame(f);
     }
-    f();
+    requestAnimationFrame(f);
   }
 })();
